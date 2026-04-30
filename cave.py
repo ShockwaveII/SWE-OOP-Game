@@ -5,6 +5,8 @@ class Cave:
         self.linked_caves = {}
         self.character = None
         self.item = None
+        self.locked = False
+        self.key = None
 
     def get_description(self):
         return self.description
@@ -28,6 +30,18 @@ class Cave:
         self.item = new_item
     def get_item (self):
         return self.item 
+    
+    #Locked Room system:
+    def get_locked(self):
+        return self.locked
+    
+    def set_locked(self, room_locked):
+        self.locked = room_locked
+
+    def get_key(self):
+        return self.key
+    def set_key(self, room_key):
+        self.key = room_key
        
     def link_cave(self, cave_to_link, direction):
         self.linked_caves[direction] = cave_to_link
@@ -43,7 +57,15 @@ class Cave:
             
     def move(self, direction):
         if direction in self.linked_caves:
-            return self.linked_caves[direction]
+            next_room = self.linked_caves[direction]
+            if next_room.get_locked():
+                print("----------------------------------------------------------")
+                print("This room is locked. Maybe there's a key around somewhere?")
+                print("----------------------------------------------------------")
+                return self
+            else:
+                return next_room
+                
         else:
             print("You can't go that way")
             return self

@@ -7,15 +7,19 @@ from item import Weapon, Item
 #rooms ACT I
 cryo_respository = Cave("Cryo Repository")
 cryo_respository.set_description("[cryo description placeholder]")
+cryo_respository.set_locked(False)
 
 hallway = Cave ("Hallway")
 hallway.set_description("[Hallway description placeholder]")
+hallway.set_locked(False)
 
 armoury = Cave("Armoury")
 armoury.set_description("[Armoury description placeholder]")
+armoury.set_locked(True)
 
 cargo_bay = Cave("Cargo Bay")
 cargo_bay.set_description("[Cargo Bay description placeholder]")
+cargo_bay.set_locked(False)
 
 #Room links ACT I
 cryo_respository.link_cave(hallway, "south")
@@ -38,6 +42,9 @@ cryo_respository.set_character(harry)
 #items
 vegemite = Item("vegemite")
 vegemite.set_description("A Wumpuses worst nightmare")
+
+armoury_key = Item("Armoury Key Card")
+armoury_key.set_description("This looks useful")
 
 #weapons
 gun = Weapon("Gun")
@@ -154,6 +161,9 @@ while dead == False:
             print("You put the " + item.get_name() + " in your bag")
             bag.update({(item.get_name()) : item})
             current_cave.set_item(None)
+
+    #unlock room:
+
 
 print("\n")
 print("Game Over")
