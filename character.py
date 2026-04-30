@@ -1,4 +1,5 @@
 
+import random
 class Character():
     def __init__(self, char_name, char_description):
         self.name = char_name
@@ -28,6 +29,7 @@ class Enemy(Character):
         super().__init__(char_name, char_description)
         self.weakness = None
         self.health = 0
+        self.dmg = 0
         Enemy.enemies_to_defeat = Enemy.enemies_to_defeat + 1
 
     def set_weakness(self, weakness):
@@ -43,18 +45,30 @@ class Enemy(Character):
     def display_health(self):
         print(self.name + ' has ' + str(self.health) + ' health')
 
-
-    def fight(self):
-        if self.health <= 0:
-            print("You Defeated " + self.name)
-            return True
-        else:
-            print(self.name + " Defeats you")
-            return False
-        
+    #Stealing System   
     def steal(self):
         print("You steal from " + self.name)
-        
+
+    #combat system
+    def set_lowest_dmg_value(self, item_lowest_dmg_value):
+        self.item_lowest_dmg_value = item_lowest_dmg_value
+
+    def get_lowest_dmg_value(self):
+        return self.item_lowest_dmg_value
+    
+    def set_highest_dmg_value(self, item_highest_dmg_value):
+        self.item_highest_dmg_value = item_highest_dmg_value
+
+    def get_highest_dmg_value(self):
+        return self.item_highest_dmg_value
+    
+    def get_dmg_value(self):
+        dmg = random.randint(self.item_lowest_dmg_value, self.item_highest_dmg_value)
+        return dmg
+
+    #health system
+    def set_health(self, health):
+        self.health = health
 
 class Friend(Character):
     def __init__(self, char_name, char_description):
