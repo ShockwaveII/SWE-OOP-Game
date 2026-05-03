@@ -2,6 +2,47 @@ from cave import Cave
 from character import Character
 from character import Enemy, Friend
 from item import Weapon, Item
+import random
+
+#weapons
+pistol = Weapon("Pistol")
+pistol.set_description("An abandoned pistol, half-buried in the snow")
+pistol.set_lowest_dmg_value(10)
+pistol.set_highest_dmg_value(30)
+
+combat_knife = Weapon("Combat Knife")
+combat_knife.set_description("A gunmetal grey combat knife, someone must have lost it")
+combat_knife.set_lowest_dmg_value(0)
+combat_knife.set_highest_dmg_value(50)
+
+power_punch = Weapon("Power Punch!")
+power_punch.set_lowest_dmg_value(0)
+power_punch.set_highest_dmg_value(50)
+
+explosive_shell = Weapon("Explosive Shell")
+explosive_shell.set_lowest_dmg_value(20)
+explosive_shell.set_highest_dmg_value(40)
+
+kill = Weapon("kill")
+kill.set_lowest_dmg_value(1000)
+kill.set_highest_dmg_value(1000)
+
+#items ACT I
+armoury_key = Item("Armoury Key Card")
+armoury_key.set_description("This looks useful")
+
+mech_suit = Item("Mk3 Mech Suit")
+mech_suit.set_description("A powerful Mechanised Exo Suit, looks good at clearing debris")
+
+#items ACT II
+red_key_card = Item("Red Keycard")
+green_key_card = Item("Green Keycard")
+blue_key_card = Item("Blue Keycard")
+factory_gate_key = Item("Factory Gate Key")
+power_cell = Item("Power-cell")
+
+
+
 
 
 #rooms ACT I
@@ -17,10 +58,12 @@ armoury = Cave("Armoury")
 armoury.set_description("[Armoury description placeholder]")
 armoury.set_locked(True)
 armoury.set_key("Armoury Key Card")
+armoury.set_item(mech_suit)
 
 cargo_bay = Cave("Cargo Bay")
 cargo_bay.set_description("[Cargo Bay description placeholder]")
 cargo_bay.set_locked(False)
+cargo_bay.set_item(armoury_key)
 
 #Room links ACT I
 cryo_respository.link_cave(hallway, "south")
@@ -29,10 +72,6 @@ hallway.link_cave(cryo_respository, "north")
 hallway.link_cave(armoury, "east")
 cargo_bay.link_cave(hallway, "east")
 armoury.link_cave(hallway, "west")
-
-#rooms ACT II 
-main_road = Cave("Main Road")
-main_road.set_description("[main road description placeholder]")
 
 #characters ACT I
 harry = Enemy("Harry", "A smelly Wumpus")
@@ -55,37 +94,80 @@ cpt_levi = Character("Captain Levi's cryo-cell", "A large, frozen-over glass tub
 cpt_levi.set_conversation("...nothing... Captain Levi's eyes are rolled back. His body limp and lifeless\nIt's too late...")
 cryo_respository.set_character(cpt_levi)
 
-#items
-vegemite = Item("vegemite")
-vegemite.set_description("A Wumpuses worst nightmare")
+#rooms ACT II 
+main_road = Cave("Main Road")
+main_road.set_description("[main road description placeholder]")
+main_road.set_locked(False)
+main_road.set_item(pistol)
 
-armoury_key = Item("Armoury Key Card")
-armoury_key.set_description("This looks useful")
-cargo_bay.set_item(armoury_key)
+plaza = Cave("Plaza")
+plaza.set_description("[Plaza description placeholder]")
+plaza.set_locked(False)
 
-mech_suit = Item("Mk3 Mech Suit")
-mech_suit.set_description("A powerful Mechanised Exo Suit, looks good at clearing debris")
-armoury.set_item(mech_suit)
+crash_site = Cave("Borealis Crash Site")
+crash_site.set_description("[Borealis Crash Site description placeholder]")
+crash_site.set_locked(False)
 
-#weapons
-gun = Weapon("Gun")
-gun.set_description("a gun")
-gun.set_lowest_dmg_value(0)
-gun.set_highest_dmg_value(50)
+factory_gate = Cave("Factory Gate")
+factory_gate.set_description("[description placeholder]")
+factory_gate.set_locked(False)
+factory_gate.set_item(combat_knife)
 
-power_punch = Weapon("Power Punch!")
-power_punch.set_lowest_dmg_value(0)
-power_punch.set_highest_dmg_value(50)
+factory_floor = Cave("Factory Floor")
+factory_floor.set_description("[description placeholder]")
+factory_floor.set_locked(True)
+factory_floor.set_key("Factory Gate Key")
 
-explosive_shell = Weapon("Explosive Shell")
-explosive_shell.set_lowest_dmg_value(20)
-explosive_shell.set_highest_dmg_value(40)
-
-kill = Weapon("kill")
-kill.set_lowest_dmg_value(1000)
-kill.set_highest_dmg_value(1000)
+security_room = Cave("Security Room")
+security_room.set_description("[description placeholder]")
+security_room.set_locked(False)
 
 
+#room links ACT II
+plaza.link_cave(main_road, "east")
+main_road.link_cave(plaza, "west")
+main_road.link_cave(crash_site, "south")
+main_road.link_cave(factory_gate, "east")
+factory_gate.link_cave(main_road, "west")
+factory_gate.link_cave(factory_floor, "east")
+factory_gate.link_cave(security_room, "south")
+factory_floor.link_cave(factory_gate, "west")
+crash_site.link_cave(main_road, "north")
+crash_site.link_cave(security_room, "east")
+security_room.link_cave(factory_gate, "north")
+security_room.link_cave(crash_site, "west")
+
+#characters ACTII
+automaton_sentry_1 = Enemy("Automaton Sentry", "An armed Automaton Guard on lookout")
+automaton_sentry_1.set_conversation("Hey! You're not supposed to be here!")
+automaton_sentry_1.set_health(100)
+automaton_sentry_1.set_lowest_dmg_value(0)
+automaton_sentry_1.set_highest_dmg_value(30)
+factory_gate.set_character(automaton_sentry_1)
+
+automaton_sentry_2 = Enemy("Automaton Sentry", "An armed Automaton Guard, looks like he's looking for someone")
+automaton_sentry_2.set_conversation("Sentry 02 reporting!I found the intruder, over!")
+automaton_sentry_2.set_health(100)
+automaton_sentry_2.set_lowest_dmg_value(0)
+automaton_sentry_2.set_highest_dmg_value(30)
+
+automaton_sentry_3 = Enemy("Automaton Sentry", "An armed Automaton Guard, looks like he's on high alert")
+automaton_sentry_3.set_conversation("This is sentry 03! He's here! The intruder's here, over!")
+automaton_sentry_3.set_health(100)
+automaton_sentry_3.set_lowest_dmg_value(0)
+automaton_sentry_3.set_highest_dmg_value(30)
+
+automaton_factory_keeper = Enemy("Automaton Factory Keeper", "A large and intimidating automaton with mech upgrades.\nIt looks like his upgrades are powered by a power-cell!")
+automaton_factory_keeper.set_conversation("You dare set foot in my factory?!")
+automaton_factory_keeper.set_health(150)
+automaton_factory_keeper.set_lowest_dmg_value(0)
+automaton_factory_keeper.set_highest_dmg_value(50)
+factory_floor.set_character(automaton_factory_keeper)
+
+#Story functions
+def randomise_room_act2():
+    random_room = random.choice([plaza, main_road, crash_site, security_room])
+    return random_room
 
 
 
@@ -95,12 +177,23 @@ bag = {
     "kill" : kill
 }
 
+#starting location/ACT
+act = 2
+current_cave = main_road
 
 event_act1_1_mech_suit = False
 event_act1_2_seeker = False
-act = 1
+
+automaton_sentry_2_location = randomise_room_act2()
+automaton_sentry_3_location = randomise_room_act2()
+event_act2_1_start = False
+event_act2_2_sentry1 = False
+event_act2_3_sentry2 = False
+event_act2_4_sentry3 = False
+event_act2_5_keys = False
+event_act2_6_keeper = False
+
 player_health = 100
-current_cave = cryo_respository
 dead = False
 fighting = False
 player_turn = False
@@ -149,6 +242,10 @@ while dead == False:
                 while player_turn == True:
                     if player_health > 0:
                         if inhabitant.health > 0:
+                            print("-------------------------")
+                            print("Available weapons:")
+                            for weapon in bag:
+                                print("- " + weapon)
                             print("-------------------------")
                             print("What will you fight with?")
                             print("-------------------------")
@@ -216,8 +313,12 @@ while dead == False:
             bag.update({(item.get_name()) : item})
             current_cave.set_item(None)
 
+    else:
+        print("---------------------")
+        print("You can't go that way")
+        print("---------------------")
 
-
+    #events
     if act == 1:
         if "Mk3 Mech Suit" in bag and event_act1_1_mech_suit == False:
             bag.update({"Power Punch!" : power_punch})
@@ -235,10 +336,68 @@ while dead == False:
                 event_act1_2_seeker = True
                 current_cave = main_road
                 act = 2
-    else:
-        print("---------------------")
-        print("You can't go that way")
-        print("---------------------")
+
+    elif act == 2:
+        if event_act2_1_start == False:
+            #remove for testing bag.pop("Mk3 Mech Suit")
+            #remove for testingbag.pop("Power Punch!")
+            #remove for testingbag.pop("Explosive Shell")
+            print("\n")
+            print("--- ACT II ---")
+            print("\n")
+            print("As you make your way north from the Borealis crash site,\nits not long until the mech suit begins to make a strange noise.\nIts motors jitter and each movement is weaker than the last.\nThen suddenly, the mech suit stops...dead in its tracks.\nAs you inspect the suit, you find it, the power cell\nit's damaged from you earlier battle with the seeker.\nWithout the suit, you'll never make it to the room\n\n-- Maybe there's a power cell around here somewhere? --")
+            print("\n")
+            event_act2_1_start = True
+
+        if current_cave == factory_gate and current_cave.get_character() is None and event_act2_2_sentry1 == False:
+            bag.update({"Red Keycard" : red_key_card})
+            print("\n")
+            print("It looks like your fight drew some attention. You hear other automatons arriving in the distance")
+            print("\n")
+            print("----------------------------------------------------------------------------------------------------")
+            print("The automaton sentry dropped a [Red Keycard] and you put it in your bag. Maybe this is for the gate?")
+            print("----------------------------------------------------------------------------------------------------")
+            print("\n")
+            automaton_sentry_2_location.set_character(automaton_sentry_2)
+            automaton_sentry_3_location.set_character(automaton_sentry_3)
+            event_act2_2_sentry1 = True
+
+        if current_cave == automaton_sentry_2_location and current_cave.get_character() is None and event_act2_2_sentry1 == True and event_act2_3_sentry2 == False:
+            bag.update({"Green Keycard" : green_key_card})
+            print("\n")
+            print("------------------------------------------------------------------------------------------------------")
+            print("The automaton sentry dropped a [Green Keycard] and you put it in your bag. Maybe this is for the gate?")
+            print("------------------------------------------------------------------------------------------------------")
+            print("\n")
+            event_act2_3_sentry2 = True
+
+        if current_cave == automaton_sentry_3_location and current_cave.get_character() is None and event_act2_2_sentry1 == True and event_act2_4_sentry3 == False:
+            bag.update({"Blue Keycard" : blue_key_card})
+            print("\n")
+            print("-----------------------------------------------------------------------------------------------------")
+            print("The automaton sentry dropped a [Blue Keycard] and you put it in your bag. Maybe this is for the gate?")
+            print("-----------------------------------------------------------------------------------------------------")
+            print("\n")
+            event_act2_4_sentry3 = True
+
+        if current_cave == factory_gate and event_act2_3_sentry2 == True and event_act2_4_sentry3 == True and event_act2_5_keys == False:
+            bag.update({"Factory Gate Key" : factory_gate_key})
+            print("\n")
+            print("---------------------------------------------------------------")
+            print("Looks like you have all 3 keys, maybe you can open the gate now")
+            print("---------------------------------------------------------------")
+            print("\n")
+            event_act2_5_keys = True
+
+        if current_cave == factory_floor and current_cave.get_character() is None and event_act2_6_keeper == False:
+            bag.update({"Power-cell" : power_cell})
+            print("\n")
+            print("---------------------------------------------------------------------------------------------------------------------")
+            print("The automaton factory keeper dropped a [Power-cell] and you put it in your bag. You can finally power your mech suit!")
+            print("---------------------------------------------------------------------------------------------------------------------")
+            print("\n")
+            event_act2_6_keeper = True
+
 
 
 
