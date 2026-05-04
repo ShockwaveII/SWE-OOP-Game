@@ -58,12 +58,12 @@ armoury = Cave("Armoury")
 armoury.set_description("[Armoury description placeholder]")
 armoury.set_locked(True)
 armoury.set_key("Armoury Key Card")
-armoury.set_item(mech_suit)
+armoury.add_item(mech_suit)
 
 cargo_bay = Cave("Cargo Bay")
 cargo_bay.set_description("[Cargo Bay description placeholder]")
 cargo_bay.set_locked(False)
-cargo_bay.set_item(armoury_key)
+cargo_bay.add_item(armoury_key)
 
 #Room links ACT I
 cryo_respository.link_cave(hallway, "south")
@@ -88,17 +88,19 @@ automaton_seeker.set_highest_dmg_value(40)
 
 terminal = Character("Terminal", "A computer terminal whose dim glow illuminates the room - [talk] to access terminal")
 terminal.set_conversation("\nB-B0rEali5 sTa-a-atUs rEp0Rt:\n\nEng1nes: oFfline\nSHie1d SystEm5: offlinE\nFiRe SupRess1on SysTem: off1ine\nHuLl 1ntegriTy: hEav1ly c0mpRom1sed\nClimaTe Contr0l SySteM: offliNe\n\n-- m0vEmeNt deTectEd 1n caRgo bAy --")
-hallway.set_character(terminal)
+hallway.add_character(terminal)
 
 cpt_levi = Character("Captain Levi's cryo-cell", "A large, frozen-over glass tube. The cryo-gas is leaking! - [talk] to open cryo-cell")
 cpt_levi.set_conversation("...nothing... Captain Levi's eyes are rolled back. His body limp and lifeless\nIt's too late...")
-cryo_respository.set_character(cpt_levi)
+cryo_respository.add_character(cpt_levi)
 
 #rooms ACT II 
 main_road = Cave("Main Road")
 main_road.set_description("[main road description placeholder]")
 main_road.set_locked(False)
-main_road.set_item(pistol)
+main_road.add_item(pistol)
+main_road.add_character(harry)
+main_road.add_character(automaton_seeker)
 
 plaza = Cave("Plaza")
 plaza.set_description("[Plaza description placeholder]")
@@ -111,7 +113,7 @@ crash_site.set_locked(False)
 factory_gate = Cave("Factory Gate")
 factory_gate.set_description("[description placeholder]")
 factory_gate.set_locked(False)
-factory_gate.set_item(combat_knife)
+factory_gate.add_item(combat_knife)
 
 factory_floor = Cave("Factory Floor")
 factory_floor.set_description("[description placeholder]")
@@ -143,7 +145,7 @@ automaton_sentry_1.set_conversation("Hey! You're not supposed to be here!")
 automaton_sentry_1.set_health(100)
 automaton_sentry_1.set_lowest_dmg_value(0)
 automaton_sentry_1.set_highest_dmg_value(30)
-factory_gate.set_character(automaton_sentry_1)
+factory_gate.add_character(automaton_sentry_1)
 
 automaton_sentry_2 = Enemy("Automaton Sentry", "An armed Automaton Guard, looks like he's looking for someone")
 automaton_sentry_2.set_conversation("Sentry 02 reporting!I found the intruder, over!")
@@ -162,14 +164,12 @@ automaton_factory_keeper.set_conversation("You dare set foot in my factory?!")
 automaton_factory_keeper.set_health(150)
 automaton_factory_keeper.set_lowest_dmg_value(0)
 automaton_factory_keeper.set_highest_dmg_value(50)
-factory_floor.set_character(automaton_factory_keeper)
+factory_floor.add_character(automaton_factory_keeper)
 
 #Story functions
 def randomise_room_act2():
     random_room = random.choice([plaza, main_road, crash_site, security_room])
     return random_room
-
-
 
 #gameplay loop
 
@@ -192,6 +192,7 @@ event_act2_3_sentry2 = False
 event_act2_4_sentry3 = False
 event_act2_5_keys = False
 event_act2_6_keeper = False
+event_act2_7_powercell = False
 
 player_health = 100
 dead = False
@@ -206,20 +207,21 @@ while dead == False:
     current_cave.get_details()
     print("\n")
 
-    item = current_cave.get_item()
-    if item is not None:
+    items = current_cave.get_item()
+    if items:
         print("-- Items --")
-        item.describe()
+        for item in items:
+            item.describe()
         print("\n")
     
 
     inhabitant = current_cave.get_character()
-    if inhabitant is not None:
-        print("-- characters --")
-        inhabitant.describe()
-        if inhabitant is Enemy:
-            inhabitant.display_health()
-        print("\n")
+    if inhabitant:
+        print("-- Characters --")
+        for character in inhabitant:
+            character.describe()
+
+    print("\n")
     command = input(">")
     print("-----------------------------------------------------------------------------")
 
@@ -230,6 +232,17 @@ while dead == False:
     # Talk to the inhabitant
     elif command == "talk":
         if inhabitant is not None:
+            if inhabitant:
+                print("Who do you want to talk to?")
+                for char in inhabitant:
+                    print("- " + char.name)
+
+            choice = input()
+
+            for char in inhabitant:
+                if char.name == choice:
+                    inhabitant = char
+                    break
             inhabitant.talk()
 
     # Fight with the inhabitant
@@ -237,6 +250,18 @@ while dead == False:
         fighting = True
         player_turn = True
         enemy_turn = False
+        if inhabitant:
+            print("Who do you want to fight?")
+            for char in inhabitant:
+                print("- " + char.name)
+
+        choice = input()
+
+        for char in inhabitant:
+            if char.name == choice:
+                inhabitant = char
+                break
+
         while fighting == True:
             if inhabitant is not None and isinstance(inhabitant, Enemy):
                 while player_turn == True:
@@ -262,7 +287,7 @@ while dead == False:
                                 enemy_turn = False
                         else:
                             print("You defeated "+ inhabitant.name)
-                            current_cave.set_character(None)
+                            current_cave.remove_character(inhabitant)
                             player_turn = False
                             fighting = False
                     else:
@@ -292,7 +317,17 @@ while dead == False:
 
     #pat the inhabitabt
     elif command == "pat":
-        if inhabitant is not None:
+        if inhabitant:
+            print("Who do you want to pat?")
+            for char in inhabitant:
+                print("- " + char.name)
+
+            choice = input()
+
+            for char in inhabitant:
+                if char.name == choice:
+                    inhabitant = char
+                    break
             if isinstance(inhabitant, Enemy):
                 print("---------------------------------")
                 print("I wouldn’t do that if I were you…")
@@ -306,12 +341,21 @@ while dead == False:
 
     #take item
     elif command == "take":
-        if item is not None:
-            print("------------------------" + ("-" * len(item.get_name())))
-            print("You put the " + item.get_name() + " in your bag")
-            print("------------------------" + ("-" * len(item.get_name())))
-            bag.update({(item.get_name()) : item})
-            current_cave.set_item(None)
+        if items:
+            print("What do you want to take?")
+            for item in items:
+                print("- " + item.name)
+
+        choice = input()
+
+        for item in items:
+            if item.get_name() == choice:
+                print("------------------------" + ("-" * len(item.get_name())))
+                print("You put the " + item.get_name() + " in your bag")
+                print("------------------------" + ("-" * len(item.get_name())))
+                bag.update({(item.get_name()) : item})
+                items.remove(item)
+                break
 
     else:
         print("---------------------")
@@ -323,7 +367,7 @@ while dead == False:
         if "Mk3 Mech Suit" in bag and event_act1_1_mech_suit == False:
             bag.update({"Power Punch!" : power_punch})
             bag.update({"Explosive Shell" : explosive_shell})
-            cargo_bay.set_character(automaton_seeker)
+            cargo_bay.add_character(automaton_seeker)
             event_act1_1_mech_suit = True
 
         if cargo_bay.get_character() == None and event_act1_1_mech_suit == True and event_act1_2_seeker == False and current_cave == cargo_bay: 
@@ -358,8 +402,8 @@ while dead == False:
             print("The automaton sentry dropped a [Red Keycard] and you put it in your bag. Maybe this is for the gate?")
             print("----------------------------------------------------------------------------------------------------")
             print("\n")
-            automaton_sentry_2_location.set_character(automaton_sentry_2)
-            automaton_sentry_3_location.set_character(automaton_sentry_3)
+            automaton_sentry_2_location.add_character(automaton_sentry_2)
+            automaton_sentry_3_location.add_character(automaton_sentry_3)
             event_act2_2_sentry1 = True
 
         if current_cave == automaton_sentry_2_location and current_cave.get_character() is None and event_act2_2_sentry1 == True and event_act2_3_sentry2 == False:
@@ -398,8 +442,15 @@ while dead == False:
             print("\n")
             event_act2_6_keeper = True
 
-
-
+        if current_cave == main_road and event_act2_6_keeper == True and event_act2_7_powercell == False:
+            main_road.set_description("Placeholder description\n----------------------------------------------------\n[Power Mech Suit] to clear debris and escape the ship!\n----------------------------------------------------")
+            if command == "Power Mech Suit":
+                print("\n")
+                print("You put the powercell in the mech suit and its engines humm to life")
+                print("\n")
+                print("Act II Complete")
+                event_act2_7_powercell = True
+                act = 3
 
 
 
