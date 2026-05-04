@@ -30,7 +30,6 @@ class Enemy(Character):
         self.weakness = None
         self.health = 0
         self.dmg = 0
-        Enemy.enemies_to_defeat = Enemy.enemies_to_defeat + 1
 
     def set_weakness(self, weakness):
         self.weakness = weakness

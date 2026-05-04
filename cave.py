@@ -65,18 +65,26 @@ class Cave:
             cave = self.linked_caves[direction]
             print("The " + cave.get_name() + " is " + direction)
             
-    def move(self, direction):
+    def move(self, direction, bag):
         if direction in self.linked_caves:
             next_room = self.linked_caves[direction]
             if next_room.get_locked():
-                print("----------------------------------------------------------")
-                print("This room is locked. Maybe there's a key around somewhere?")
-                print("----------------------------------------------------------")
-                return self
+                if next_room.get_key() in bag:
+                    print("\n")
+                    print("------------------------------------")
+                    print("You use the key to unlock the room.")
+                    print("------------------------------------")
+                    next_room.set_locked(False)
+                    return next_room
+                else:
+                    print("\n")
+                    print("----------------------------------------------------------")
+                    print("This room is locked. Maybe there's a key around somewhere?")
+                    print("----------------------------------------------------------")
+                    return self
             else:
                 return next_room
                 
         else:
-            print("You can't go that way")
             return self
         
