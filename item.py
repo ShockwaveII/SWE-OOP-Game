@@ -44,4 +44,9 @@ class Weapon(Item):
     def get_dmg_value(self):
         dmg = random.randint(self.item_lowest_dmg_value, self.item_highest_dmg_value)
         return dmg
+    
+    def set_dmg_type(self, input_item_dmg_type):
+        self.item_dmg_type = input_item_dmg_type
 
+    def get_dmg_type(self):
+        return self.item_dmg_type

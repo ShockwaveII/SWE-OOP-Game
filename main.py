@@ -9,23 +9,28 @@ pistol = Weapon("Pistol")
 pistol.set_description("An abandoned pistol, half-buried in the snow")
 pistol.set_lowest_dmg_value(10)
 pistol.set_highest_dmg_value(30)
+pistol.set_dmg_type("ranged")
 
 combat_knife = Weapon("Combat Knife")
 combat_knife.set_description("A gunmetal grey combat knife, someone must have lost it")
 combat_knife.set_lowest_dmg_value(0)
 combat_knife.set_highest_dmg_value(50)
+combat_knife.set_dmg_type("melee")
 
 power_punch = Weapon("Power Punch!")
 power_punch.set_lowest_dmg_value(0)
 power_punch.set_highest_dmg_value(50)
+power_punch.set_dmg_type("melee")
 
 explosive_shell = Weapon("Explosive Shell")
 explosive_shell.set_lowest_dmg_value(20)
 explosive_shell.set_highest_dmg_value(40)
+explosive_shell.set_dmg_type("ranged")
 
 kill = Weapon("kill")
 kill.set_lowest_dmg_value(1000)
 kill.set_highest_dmg_value(1000)
+kill.set_dmg_type("ranged")
 
 #items ACT I
 armoury_key = Item("Armoury Key Card")
@@ -259,7 +264,29 @@ boss_phase_1_key = Item("Boss Phase 1")
 boss_phase_2_key = Item("Boss Phase 2")
 boss_phase_3_key = Item("Boss Phase 3")
 
+#rewards 1
+rocket_launcher = Weapon("Rocket launcher")
+rocket_launcher.set_description("A VERY powerful ranged weapon! reliable but damage is limited")
+rocket_launcher.set_lowest_dmg_value(20)
+rocket_launcher.set_highest_dmg_value(65)
+rocket_launcher.set_dmg_type("ranged")
+upgrade_room_1.add_item(rocket_launcher)
 
+rocket_hammer = Weapon("Rocket Hammer")
+rocket_hammer.set_description("A VERY powerful melee weapon! can do alot of damage is also very dodgeable")
+rocket_hammer.set_lowest_dmg_value(0)
+rocket_hammer.set_highest_dmg_value(85)
+rocket_hammer.set_dmg_type("melee")
+upgrade_room_1.add_item(rocket_hammer)
+
+#rewards 2
+laser_sights = Item("Laser sights")
+laser_sights.set_description("-- +25% increased ranged damage --")
+upgrade_room_2.add_item(laser_sights)
+
+mech_suit_overclock = Item("Mech Suit Overclocking")
+mech_suit_overclock.set_description("-- +25% increased melee damage --")
+upgrade_room_2.add_item(mech_suit_overclock)
 
 #Story functions
 def randomise_room_act2():
@@ -302,6 +329,11 @@ event_act2_7_powercell = False
 event_act3_1_boss_1 = False
 event_act3_2_boss_2 = False
 event_act3_3_boss_3 = False
+event_act3_4_rocket_hammer = False
+event_act3_5_rocket_launcher = False
+event_act3_6_sights = False
+event_act3_7_overclock = False
+event_act3_8_BOMBSAWAY = False
 
 
 
@@ -310,6 +342,8 @@ dead = False
 fighting = False
 player_turn = False
 enemy_turn = True
+ranged_dmg_done_modifier = 1
+melee_dmg_done_modifier = 1
 print("-----------------------------------------------------------------------------")
 while dead == False:
     #descriptions
@@ -424,18 +458,27 @@ while dead == False:
                 weapon_name = input("What will you fight with?\n")
 
                 if weapon_name in bag:
-                    dmg_done = bag[weapon_name].get_dmg_value()
-                    enemy.health -= dmg_done
-                    print(str(dmg_done) + " damage done")
-                    player_turn = False
-                    enemy_turn = True
+                    if bag[weapon_name].item_dmg_type == "ranged":
+                        dmg_done = bag[weapon_name].get_dmg_value()
+                        enemy.health = enemy.health - (dmg_done * ranged_dmg_done_modifier)
+                        print(str(dmg_done * ranged_dmg_done_modifier) + " damage done")
+                        print("ranged dmg")
+                        player_turn = False
+                        enemy_turn = True
+                    elif bag[weapon_name].item_dmg_type == "melee":
+                        dmg_done = bag[weapon_name].get_dmg_value()
+                        enemy.health = enemy.health - (dmg_done * melee_dmg_done_modifier)
+                        print(str(dmg_done * melee_dmg_done_modifier) + " damage done")
+                        print("melee dmg")
+                        player_turn = False
+                        enemy_turn = True
                 else:
                     print("You don't have a " + weapon_name)
 
             elif enemy_turn:
                 print("\n" + enemy.name + " attacks!")
                 dmg = enemy.get_dmg_value()
-                player_health -= dmg
+                player_health = player_health - dmg
                 print(str(dmg) + " damage taken")
 
                 print("----------------")
@@ -568,6 +611,34 @@ while dead == False:
             print("Congratulatulations message 3")
             print("\n")
             event_act3_3_boss_3 = True
+
+        if current_cave == upgrade_room_1 and rocket_hammer not in current_cave.get_item() and event_act3_4_rocket_hammer == False:
+            current_cave.remove_item(rocket_launcher)
+            event_act3_4_rocket_hammer = True
+
+        if current_cave == upgrade_room_1 and rocket_launcher not in current_cave.get_item() and event_act3_5_rocket_launcher == False:
+            current_cave.remove_item(rocket_hammer)
+            event_act3_5_rocket_launcher = True
+
+        if current_cave == upgrade_room_2 and laser_sights not in current_cave.get_item() and event_act3_6_sights == False:
+            current_cave.remove_item(mech_suit_overclock)
+            ranged_dmg_done_modifier = ranged_dmg_done_modifier + 0.25
+            event_act3_6_sights = True
+
+        if current_cave == upgrade_room_2 and mech_suit_overclock not in current_cave.get_item() and event_act3_7_overclock == False:
+            current_cave.remove_item(laser_sights)
+            melee_dmg_done_modifier = melee_dmg_done_modifier + 0.25
+            event_act3_7_overclock = True
+
+        if current_cave == control_room and event_act3_8_BOMBSAWAY == False:
+            if command == "Activate Self-destruct Sequence":
+                print("Megafacories go Boom!")
+                Rocket_room.set_description("time to get outa here")
+                event_act3_8_BOMBSAWAY = True
+
+        if current_cave == Rocket_room and event_act3_8_BOMBSAWAY == True:
+            if command == "Activate Launch Sequence":
+                print("You won the game")
 
 
 
