@@ -32,6 +32,11 @@ kill.set_lowest_dmg_value(1000)
 kill.set_highest_dmg_value(1000)
 kill.set_dmg_type("ranged")
 
+nothing = Weapon("nothing")
+nothing.set_lowest_dmg_value(0)
+nothing.set_highest_dmg_value(0)
+nothing.set_dmg_type("melee")
+
 #items ACT I
 armoury_key = Item("Armoury Key Card")
 armoury_key.set_description("This looks useful")
@@ -66,7 +71,7 @@ armoury.set_key("Armoury Key Card")
 armoury.add_item(mech_suit)
 
 cargo_bay = Cave("Cargo Bay")
-cargo_bay.set_description("[Cargo Bay description placeholder]")
+cargo_bay.set_description("There's debris that needs heavy machinery to clear, like a mech suit")
 cargo_bay.set_locked(False)
 cargo_bay.add_item(armoury_key)
 
@@ -300,15 +305,38 @@ def take_item(item, items):
     bag.update({item.get_name(): item})
     items.remove(item)
 
+def respawn(act):
+    global current_cave, player_health, dead
+
+    print("\n--- You feel consciousness returning... ---\n")
+
+    player_health = 100
+    dead = False
+
+    if act == 1:
+        current_cave = cryo_respository
+        print("You awaken back in the Cryo Repository...")
+    
+    elif act == 2:
+        current_cave = main_road
+        print("You awaken near the Borealis crash site...")
+    
+    elif act == 3:
+        current_cave = control_facility_gate
+        print("You awaken at the Control Facility Gate...")
+
+    print("Try again.\n")
+
 #gameplay loop
 
 bag = {
-    "kill" : kill
+    "kill" : kill,
+    "nothing" : nothing
 }
 
 #starting location/ACT
-act = 3
-current_cave = control_facility_gate
+act = 1
+current_cave = cryo_respository
 
 #act 1 events
 event_act1_1_mech_suit = False
@@ -368,6 +396,7 @@ while dead == False:
 
     print("\n")
     command = input(">")
+    #command = command.lower()
     print("-----------------------------------------------------------------------------")
 
     #navigation
@@ -438,8 +467,8 @@ while dead == False:
             if player_turn:
                 if player_health <= 0:
                     print("you were defeated by " + enemy.name)
-                    dead = True
                     fighting = False
+                    respawn(act)
                     break
 
                 if enemy.health <= 0:
@@ -515,10 +544,10 @@ while dead == False:
         if "Mk3 Mech Suit" in bag and event_act1_1_mech_suit == False:
             bag.update({"Power Punch!" : power_punch})
             bag.update({"Explosive Shell" : explosive_shell})
-            cargo_bay.set_character(automaton_seeker)
+            cargo_bay.add_character(automaton_seeker)
             event_act1_1_mech_suit = True
 
-        if cargo_bay.get_character() == None and event_act1_1_mech_suit == True and event_act1_2_seeker == False and current_cave == cargo_bay: 
+        if automaton_seeker not in cargo_bay.get_character() and event_act1_1_mech_suit == True and event_act1_2_seeker == False and current_cave == cargo_bay: 
             cargo_bay.set_description("[Cargo Bay description placeholder]\n----------------------------------------------------\n[Use Mech Suit] to clear debris and escape the ship!\n----------------------------------------------------")
             if command == "Use Mech Suit":
                 print("\n")
@@ -528,6 +557,14 @@ while dead == False:
                 event_act1_2_seeker = True
                 current_cave = main_road
                 act = 2
+                bag.pop("Mk3 Mech Suit")
+                bag.pop("Power Punch!")
+                bag.pop("Explosive Shell")
+                print("\n")
+                print("--- ACT II ---")
+                print("\n")
+                print("As you make your way north from the Borealis crash site,\nits not long until the mech suit begins to make a strange noise.\nIts motors jitter and each movement is weaker than the last.\nThen suddenly, the mech suit stops...dead in its tracks.\nAs you inspect the suit, you find it, the power cell\nit's damaged from you earlier battle with the seeker.\nWithout the suit, you'll never make it to the room\n\n-- Maybe there's a power cell around here somewhere? --")
+                print("\n")
 
     elif act == 2:
         if current_cave == factory_gate and automaton_sentry_1 not in current_cave.get_character() and event_act2_2_sentry1 == False:
@@ -589,7 +626,13 @@ while dead == False:
                 print("Act II Complete")
                 event_act2_7_powercell = True
                 act = 3
-
+                current_cave = control_facility_gate
+                print("\n")
+                print("--- ACT III ---")
+                print("\n")
+                print("You make your way to the foot of the steely spire which dominates the skyline,\nThe Megafactory Control Facility\nAs you step foot through the gate, you see the visage of a tall and menacing machine\n-- looks like there's going to be one last fight... --")
+                print("\n")
+                
     elif act == 3:
         if current_cave == boss_arena_1 and boss_phase_1 not in current_cave.get_character() and event_act3_1_boss_1 == False:
             bag.update({"Boss Phase 1" : boss_phase_1_key})
