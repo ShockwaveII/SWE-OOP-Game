@@ -69,7 +69,7 @@ class Cave:
         if direction in self.linked_caves:
             next_room = self.linked_caves[direction]
             if next_room.get_locked():
-                if next_room.get_key() in bag:
+                if next_room.get_key().lower() in bag:
                     print("\n")
                     print("------------------------------------")
                     print("You use the key to unlock the room.")

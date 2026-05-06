@@ -3,6 +3,11 @@ from character import Character
 from character import Enemy, Friend
 from item import Weapon, Item
 import random
+import pygame
+
+#pygame.mixer.init()
+act_1_audio = "act_1_audio.mp3"
+act_2_3_audio = "act_2_3_audio.mp3"
 
 #weapons
 pistol = Weapon("Pistol")
@@ -17,7 +22,7 @@ combat_knife.set_lowest_dmg_value(0)
 combat_knife.set_highest_dmg_value(50)
 combat_knife.set_dmg_type("melee")
 
-power_punch = Weapon("Power Punch!")
+power_punch = Weapon("Power Punch")
 power_punch.set_lowest_dmg_value(0)
 power_punch.set_highest_dmg_value(50)
 power_punch.set_dmg_type("melee")
@@ -45,11 +50,11 @@ mech_suit = Item("Mk3 Mech Suit")
 mech_suit.set_description("A powerful Mechanised Exo Suit, looks good at clearing debris")
 
 #items ACT II
-red_key_card = Item("Red Keycard")
-green_key_card = Item("Green Keycard")
-blue_key_card = Item("Blue Keycard")
-factory_gate_key = Item("Factory Gate Key")
-power_cell = Item("Power-cell")
+red_key_card = Item("red Keycard")
+green_key_card = Item("green Keycard")
+blue_key_card = Item("blue Keycard")
+factory_gate_key = Item("factory Gate Key")
+power_cell = Item("power-cell")
 
 
 
@@ -57,21 +62,21 @@ power_cell = Item("Power-cell")
 
 #rooms ACT I
 cryo_respository = Cave("Cryo Repository")
-cryo_respository.set_description("[cryo description placeholder]")
+cryo_respository.set_description("A cold and sterile room, illuminated by the faint and\nrefracted glow of the rows upon rows of damaged cyro-cells.")
 cryo_respository.set_locked(False)
 
 hallway = Cave ("Hallway")
-hallway.set_description("[Hallway description placeholder]")
+hallway.set_description("A dimly lit metalic hallway where stray sparks spring from the abundnace of exposed wiring.\nEvery other steel plate which lines the hall is either deformed, burnt or fallen to the floor.")
 hallway.set_locked(False)
 
 armoury = Cave("Armoury")
-armoury.set_description("[Armoury description placeholder]")
+armoury.set_description("A sturdy and reinforced section of the ship which has largely survived the crash.\nInside lays racks of special weapons, tools and equipment\n-- The centrepiece is a large yellow mech exosuit --")
 armoury.set_locked(True)
 armoury.set_key("Armoury Key Card")
 armoury.add_item(mech_suit)
 
 cargo_bay = Cave("Cargo Bay")
-cargo_bay.set_description("There's debris that needs heavy machinery to clear, like a mech suit")
+cargo_bay.set_description("A hevily damaged section of the ship, half crushed by \na mountain of debris and what was formally considered 'cargo'.\nA lone beam of natural sunlight from outside the ship penetrates through!\n\n-- Maybe some heavy machinery from the armoury could clear this debris? --")
 cargo_bay.set_locked(False)
 cargo_bay.add_item(armoury_key)
 
@@ -106,30 +111,30 @@ cryo_respository.add_character(cpt_levi)
 
 #rooms ACT II 
 main_road = Cave("Main Road")
-main_road.set_description("[main road description placeholder]")
+main_road.set_description("A wide asphalt road that spans as far as the eye can see a deep layer\nof snow covers the surrounding area which reflects the moonlight\nThe mech suit is inconspicuously hidden under a torn fabric tarpn\n\n-- There's a bright artificial light eminating from the east --")
 main_road.set_locked(False)
 main_road.add_item(pistol)
 
 plaza = Cave("Plaza")
-plaza.set_description("[Plaza description placeholder]")
+plaza.set_description("A quiet and spacious environment that looks designed for leasure\nA lone vending machine in pristine conditions stands out, yet\nseems entirely unimportant. Its almost calming...")
 plaza.set_locked(False)
 
-crash_site = Cave("Borealis Crash Site")
-crash_site.set_description("[Borealis Crash Site description placeholder]")
+crash_site = Cave("Borealis Crash Site View")
+crash_site.set_description("The Borealis dominates the landscape despite lacking its front third.\nThe fires still flicker and dance as its situation deteriorates\n\n-- The automatons will pay for this! --")
 crash_site.set_locked(False)
 
 factory_gate = Cave("Factory Gate")
-factory_gate.set_description("[description placeholder]")
+factory_gate.set_description("A tall concrete wall stretches endlessly in two directions. Its\nenterance is a thick steel gate that looks capable of stopping\nanything in its tracks")
 factory_gate.set_locked(False)
 factory_gate.add_item(combat_knife)
 
 factory_floor = Cave("Factory Floor")
-factory_floor.set_description("[description placeholder]")
+factory_floor.set_description("An expansive platform littered with heavy industrial machinery. An\nominous red light engulfs the facility instilling a sense of terror\n")
 factory_floor.set_locked(True)
-factory_floor.set_key("Factory Gate Key")
+factory_floor.set_key("factory gate key")
 
 security_room = Cave("Security Room")
-security_room.set_description("[description placeholder]")
+security_room.set_description("A small and quiet room which stands out in the snow. The flurescent\nlight illuminates its surroundings, prime of which is a lone tree\nstump with a knife jabbed in it")
 security_room.set_locked(False)
 
 
@@ -192,38 +197,37 @@ security_room.add_character(sleepy)
 
 #rooms ACT III
 control_facility_gate = Cave("Control Facility Gate")
-control_facility_gate.set_description("placeholder")
+control_facility_gate.set_description("The tall and domineering entrance to the control facility which\ngoverns all megafactories on the planet. A robust and mechanical\nfigure stands expectingly in the doorway, a cold sneer on his\nrobotic face.")
 control_facility_gate.set_locked(False)
 
-boss_arena_1 = Cave("Boss Arena 1")
-boss_arena_1.set_description("placeholder")
+boss_arena_1 = Cave("Floor 1 - The Lobby")
+boss_arena_1.set_description("The ground lobby of the control facility. Its a large ornate room\nwith plentiful space to fight. The elevator is at the very end.")
 boss_arena_1.set_locked(False)
 
-boss_arena_2 = Cave("Boss Arena 2")
-boss_arena_2.set_description("placeholder")
+boss_arena_2 = Cave("Floor 2 - The Observation platform")
+boss_arena_2.set_description("The floor is dominated by a large window that offers a stunning\nview of the megafactory. Its industrial might a symbol of automaton power\nIt will soon be reduced to rubble.")
 boss_arena_2.set_locked(False)
 
-boss_arena_3 = Cave("Boss Arena 3")
-boss_arena_3.set_description("placeholder")
+boss_arena_3 = Cave("Floor 3 - The Inner Sanctum")
+boss_arena_3.set_description("The inner most chamber of the control facility. The control room itself is\nwithin sight, the automaton's guardian and commander is the only obstacle left.")
 boss_arena_3.set_locked(False)
-
-upgrade_room_1 = Cave("Upgrade Room 1")
-upgrade_room_1.set_description("placeholder")
+upgrade_room_1 = Cave("Elevator - Floor 1")
+upgrade_room_1.set_description("An industrial elevator with multiple cargo crates. Some of them\nmay be useful.\n\n--- You can only take one ---")
 upgrade_room_1.set_locked(True)
-upgrade_room_1.set_key("Boss Phase 1")
+upgrade_room_1.set_key("boss phase 1")
 
-upgrade_room_2 = Cave("Upgrade Room 2")
-upgrade_room_2.set_description("placeholder")
+upgrade_room_2 = Cave("Elevator - Floor 2")
+upgrade_room_2.set_description("An industrial elevator with multiple cargo crates. Some of them\nmay be useful.\n\n--- You can only take one ---")
 upgrade_room_2.set_locked(True)
-upgrade_room_2.set_key("Boss Phase 2")
+upgrade_room_2.set_key("boss phase 2")
 
 control_room = Cave("Control Room")
-control_room.set_description("placeholder")
+control_room.set_description("A small chamber littered with a plethora of screens and blinking\nlights. The centrepeice is a large red button that reads Detonate.\n\n----------------------------------------------------------\nType [Self Destruct] to clear debris and escape the ship!\n----------------------------------------------------------")
 control_room.set_locked(True)
-control_room.set_key("Boss Phase 3")
+control_room.set_key("boss phase 3")
 
 Rocket_room = Cave("Emergency Escape Rocket")
-Rocket_room.set_description("placeholder")
+Rocket_room.set_description("A small rocket designed to transport a select few off-world in the\nevent of an emergency. The controls are relatively simple.\n\n--------------------------------------------------------\nType [Liftoff] to clear debris and escape the ship!\n--------------------------------------------------------")
 Rocket_room.set_locked(False)
 
 #room links ACT III
@@ -243,31 +247,39 @@ control_room.link_cave(Rocket_room, "east")
 Rocket_room.link_cave(control_room, "west")
 
 #characters ACT III
-boss_phase_1 = Enemy("Boss fight phase 1", "placeholder")
-boss_phase_1.set_conversation("placeholder")
+boss_phase_1 = Enemy("Automaton Viceroy", "The proud mechanical ruler of Cyberstan come put you in the ground")
+boss_phase_1.set_conversation("Stand ready, human. You shall be reuinted with your fallen comrades very soon")
 boss_phase_1.set_health(150)
 boss_phase_1.set_lowest_dmg_value(0)
 boss_phase_1.set_highest_dmg_value(50)
 boss_arena_1.add_character(boss_phase_1)
 
-boss_phase_2 = Enemy("Boss fight phase 2", "placeholder")
-boss_phase_2.set_conversation("placeholder")
+boss_phase_2 = Enemy("Automaton Viceroy - 2nd form", "The despotic viceroy, now upgraded with an arsenal of heat-seaking rockets")
+boss_phase_2.set_conversation("You think this is over? No. Be ready to greet your foul brethren in hell!")
 boss_phase_2.set_health(150)
 boss_phase_2.set_lowest_dmg_value(0)
 boss_phase_2.set_highest_dmg_value(50)
 boss_arena_2.add_character(boss_phase_2)
 
-boss_phase_3 = Enemy("Boss fight phase 3", "placeholder")
-boss_phase_3.set_conversation("placeholder")
+boss_phase_3 = Enemy("Automaton Viceroy - 3rd form", "What stands before you is a hulking steel monster. His tall frame filled out with a bulk of guns and thick metal armour")
+boss_phase_3.set_conversation("YOU DIE HERE, MEATBAG!!!")
 boss_phase_3.set_health(150)
 boss_phase_3.set_lowest_dmg_value(0)
 boss_phase_3.set_highest_dmg_value(50)
 boss_arena_3.add_character(boss_phase_3)
 
+control_console = Character("Control Console", "A large assortment of buttons and switches with a large detonation button in the centre")
+control_console.set_conversation("Self destruct system on standby, awaiting input")
+control_room.add_character(control_console)
+
+rocket_control_terminal = Character("Rocket Control Terminal","input [talk] to access ship diagnostics")
+rocket_control_terminal.set_conversation("Emergency Escape Rocket Status Report:\nEngines: Online\nSheilds: Online\nFire Supression System: Online\nHull Integrity: Intact\nClimate Control System: Online\n\n--- Ready for liftoff ---")
+Rocket_room.add_character(rocket_control_terminal)
+
 #items ACT III
-boss_phase_1_key = Item("Boss Phase 1")
-boss_phase_2_key = Item("Boss Phase 2")
-boss_phase_3_key = Item("Boss Phase 3")
+boss_phase_1_key = Item("boss phase 1")
+boss_phase_2_key = Item("boss phase 2")
+boss_phase_3_key = Item("boss phase 3")
 
 #rewards 1
 rocket_launcher = Weapon("Rocket launcher")
@@ -299,10 +311,10 @@ def randomise_room_act2():
     return random_room
 
 def take_item(item, items):
-    print("------------------------" + ("-" * len(item.get_name())))
-    print("You put the " + item.get_name() + " in your bag")
-    print("------------------------" + ("-" * len(item.get_name())))
-    bag.update({item.get_name(): item})
+    print("------------------------------" + ("-" * len(item.get_name())))
+    print("You put the " + item.get_name() + " in your inventory")
+    print("------------------------------" + ("-" * len(item.get_name())))
+    bag.update({item.get_name().lower(): item})
     items.remove(item)
 
 def respawn(act):
@@ -327,6 +339,10 @@ def respawn(act):
 
     print("Try again.\n")
 
+def play_music(track):
+    pygame.mixer.music.load(track)
+    pygame.mixer.music.play(-1)
+
 #gameplay loop
 
 bag = {
@@ -335,8 +351,8 @@ bag = {
 }
 
 #starting location/ACT
-act = 1
-current_cave = cryo_respository
+act = 3
+current_cave = control_facility_gate
 
 #act 1 events
 event_act1_1_mech_suit = False
@@ -372,7 +388,17 @@ player_turn = False
 enemy_turn = True
 ranged_dmg_done_modifier = 1
 melee_dmg_done_modifier = 1
-print("-----------------------------------------------------------------------------")
+
+
+
+print("-------------------------------------------------------------------------------------------------")
+print("You are the ‘Sole Survivor’, an Imperial marine aboard the ISV Borealis which has crashed\non the Forgeworld of ‘Cyberstan’, occupied by the treacherous Automoton Legion. The legion\nof mechanical monstrosities has launched its brutal war of aggression against the Imperium\nof Terra, sending the galaxy into turmoil. Now alone and behind enemy lines, you have no choice\nbut to take down the Forgeworld and ensure it cannot fuel the automaton war machine.")
+print("-------------------------------------------------------------------------------------------------")
+print("\n")
+print("--- ACT I ---")
+print("\n")
+print("You wake up to the cold embrace of your cryo-cell as it opens...")
+#play_music(act_1_audio)
 while dead == False:
     #descriptions
     
@@ -396,7 +422,7 @@ while dead == False:
 
     print("\n")
     command = input(">")
-    #command = command.lower()
+    command = command.lower()
     print("-----------------------------------------------------------------------------")
 
     #navigation
@@ -419,9 +445,10 @@ while dead == False:
                 print("- " + char.name)
 
             choice = input()
+            choice = choice.lower()
 
             for char in inhabitant:
-                if char.name == choice:
+                if char.name.lower() == choice:
                     char.talk()
                     break
 
@@ -452,10 +479,11 @@ while dead == False:
                 print("- " + char.name)
 
             choice = input()
+            choice = choice.lower()
 
             enemy = None
             for char in enemies:
-                if char.name == choice:
+                if char.name.lower() == choice:
                     enemy = char
                     break
 
@@ -485,6 +513,7 @@ while dead == False:
                         print("* " + item.get_name())
 
                 weapon_name = input("What will you fight with?\n")
+                weapon_name = weapon_name.lower()
 
                 if weapon_name in bag:
                     if bag[weapon_name].item_dmg_type == "ranged":
@@ -523,7 +552,6 @@ while dead == False:
             print("There is nothing here to take")
 
         elif len(items) == 1:
-            # AUTO TAKE
             item = items[0]
             take_item(item, items)
 
@@ -533,23 +561,24 @@ while dead == False:
                 print("- " + item.name)
 
             choice = input()
+            choice = choice.lower()
 
             for item in items:
-                if item.get_name() == choice:
+                if item.get_name().lower() == choice:
                     take_item(item, items)
                     break
 
     #events
     if act == 1:
-        if "Mk3 Mech Suit" in bag and event_act1_1_mech_suit == False:
-            bag.update({"Power Punch!" : power_punch})
-            bag.update({"Explosive Shell" : explosive_shell})
+        if "mk3 mech suit" in bag and event_act1_1_mech_suit == False:
+            bag.update({"power punch" : power_punch})
+            bag.update({"explosive shell" : explosive_shell})
             cargo_bay.add_character(automaton_seeker)
             event_act1_1_mech_suit = True
 
         if automaton_seeker not in cargo_bay.get_character() and event_act1_1_mech_suit == True and event_act1_2_seeker == False and current_cave == cargo_bay: 
-            cargo_bay.set_description("[Cargo Bay description placeholder]\n----------------------------------------------------\n[Use Mech Suit] to clear debris and escape the ship!\n----------------------------------------------------")
-            if command == "Use Mech Suit":
+            cargo_bay.set_description("A hevily damaged section of the ship, half crushed by \na mountain of debris and what was formally considered 'cargo'.\nA lone beam of natural sunlight from outside the ship penetrates through!\n\n--------------------------------------------------------\nType [Use Mech Suit] to clear debris and escape the ship!\n--------------------------------------------------------")
+            if command == "use mech suit":
                 print("\n")
                 print("Using the Mech Suit, you clear the fallen debris. \nThe sound of metal scaping against the ships hull fills the room. \nYou manage to escape the escape the Borealis!")
                 print("\n")
@@ -557,18 +586,20 @@ while dead == False:
                 event_act1_2_seeker = True
                 current_cave = main_road
                 act = 2
-                bag.pop("Mk3 Mech Suit")
-                bag.pop("Power Punch!")
-                bag.pop("Explosive Shell")
+                bag.pop("mk3 mech suit")
+                bag.pop("power punch")
+                bag.pop("explosive shell")
                 print("\n")
                 print("--- ACT II ---")
                 print("\n")
                 print("As you make your way north from the Borealis crash site,\nits not long until the mech suit begins to make a strange noise.\nIts motors jitter and each movement is weaker than the last.\nThen suddenly, the mech suit stops...dead in its tracks.\nAs you inspect the suit, you find it, the power cell\nit's damaged from you earlier battle with the seeker.\nWithout the suit, you'll never make it to the room\n\n-- Maybe there's a power cell around here somewhere? --")
                 print("\n")
+                pygame.mixer.music.stop()
+                #play_music(act_2_3_audio)
 
     elif act == 2:
         if current_cave == factory_gate and automaton_sentry_1 not in current_cave.get_character() and event_act2_2_sentry1 == False:
-            bag.update({"Red Keycard" : red_key_card})
+            bag.update({"red Keycard" : red_key_card})
             print("\n")
             print("It looks like your fight drew some attention. You hear other automatons arriving in the distance")
             print("\n")
@@ -581,7 +612,7 @@ while dead == False:
             event_act2_2_sentry1 = True
 
         if current_cave == automaton_sentry_2_location and automaton_sentry_2 not in current_cave.get_character() and event_act2_2_sentry1 == True and event_act2_3_sentry2 == False:
-            bag.update({"Green Keycard" : green_key_card})
+            bag.update({"green Keycard" : green_key_card})
             print("\n")
             print("------------------------------------------------------------------------------------------------------")
             print("The automaton sentry dropped a [Green Keycard] and you put it in your bag. Maybe this is for the gate?")
@@ -590,7 +621,7 @@ while dead == False:
             event_act2_3_sentry2 = True
 
         if current_cave == automaton_sentry_3_location and automaton_sentry_3 not in current_cave.get_character() and event_act2_2_sentry1 == True and event_act2_4_sentry3 == False:
-            bag.update({"Blue Keycard" : blue_key_card})
+            bag.update({"blue Keycard" : blue_key_card})
             print("\n")
             print("-----------------------------------------------------------------------------------------------------")
             print("The automaton sentry dropped a [Blue Keycard] and you put it in your bag. Maybe this is for the gate?")
@@ -599,7 +630,7 @@ while dead == False:
             event_act2_4_sentry3 = True
 
         if current_cave == factory_gate and event_act2_3_sentry2 == True and event_act2_4_sentry3 == True and event_act2_5_keys == False:
-            bag.update({"Factory Gate Key" : factory_gate_key})
+            bag.update({"factory gate key" : factory_gate_key})
             print("\n")
             print("---------------------------------------------------------------")
             print("Looks like you have all 3 keys, maybe you can open the gate now")
@@ -608,7 +639,7 @@ while dead == False:
             event_act2_5_keys = True
 
         if current_cave == factory_floor and automaton_factory_keeper not in current_cave.get_character() and event_act2_6_keeper == False:
-            bag.update({"Power-cell" : power_cell})
+            bag.update({"power-cell" : power_cell})
             print("\n")
             print("---------------------------------------------------------------------------------------------------------------------")
             print("The automaton factory keeper dropped a [Power-cell] and you put it in your bag. You can finally power your mech suit!")
@@ -619,7 +650,7 @@ while dead == False:
 
         if current_cave == main_road and event_act2_6_keeper == True and event_act2_7_powercell == False:
             main_road.set_description("Placeholder description\n----------------------------------------------------\n[Power Mech Suit] to clear debris and escape the ship!\n----------------------------------------------------")
-            if command == "Power Mech Suit":
+            if command == "power mech suit":
                 print("\n")
                 print("You put the powercell in the mech suit and its engines humm to life")
                 print("\n")
@@ -635,23 +666,23 @@ while dead == False:
                 
     elif act == 3:
         if current_cave == boss_arena_1 and boss_phase_1 not in current_cave.get_character() and event_act3_1_boss_1 == False:
-            bag.update({"Boss Phase 1" : boss_phase_1_key})
+            bag.update({"boss phase 1" : boss_phase_1_key})
             print("\n")
-            print("Congratulatulations message 1")
+            print("The Automaton viceroy stumbles back momenteray in a breif moment of weakness.\n'This isn't over...' he says before blasting his way to the next floor\n-- The elevator should be accessable now --")
             print("\n")
             event_act3_1_boss_1 = True
 
         if current_cave == boss_arena_2 and boss_phase_2 not in current_cave.get_character() and event_act3_2_boss_2 == False:
-            bag.update({"Boss Phase 2" : boss_phase_2_key})
+            bag.update({"boss phase 2" : boss_phase_2_key})
             print("\n")
-            print("Congratulatulations message 2")
+            print("The Automaton viceroy recoils at your blow, his once composed\ndemenor now consumed by rage. 'LETS FINSIH THIS!!' he roars\nblasting his way to the next floor again\n-- The elevator should be accessable now --")
             print("\n")
             event_act3_2_boss_2 = True
 
         if current_cave == boss_arena_3 and boss_phase_3 not in current_cave.get_character() and event_act3_3_boss_3 == False:
-            bag.update({"Boss Phase 3" : boss_phase_3_key})
+            bag.update({"boss phase 3" : boss_phase_3_key})
             print("\n")
-            print("Congratulatulations message 3")
+            print("The Automaton viceroy collapses, clearly too damaged to get\nback up again. 'Curse you human!' he managed to utter out\nbefore his systems go offline.")
             print("\n")
             event_act3_3_boss_3 = True
 
@@ -674,14 +705,15 @@ while dead == False:
             event_act3_7_overclock = True
 
         if current_cave == control_room and event_act3_8_BOMBSAWAY == False:
-            if command == "Activate Self-destruct Sequence":
-                print("Megafacories go Boom!")
-                Rocket_room.set_description("time to get outa here")
+            if command == "self destruct":
+                current_cave.set_description("A small chamber littered with a plethora of screens and blinking\nlights. The centrepeice is a large red button that reads Detonate.\n\n--- Hurry to the escape rocket! ---")
+                print("As you press the button, you feel the ground start to shake. Your\neyes are drawn to the screens that now flash with a red 'warning' sign\n All megafactories all arounf the planet have begun the self destruct\nsequence, including the one you're in right now!")
                 event_act3_8_BOMBSAWAY = True
 
         if current_cave == Rocket_room and event_act3_8_BOMBSAWAY == True:
-            if command == "Activate Launch Sequence":
+            if command == "liftoff":
                 print("You won the game")
+                dead = True
 
 
 
