@@ -7,7 +7,7 @@ from tkinter import scrolledtext
 import random
 import pygame
 
-pygame.mixer.init()
+#pygame.mixer.init()
 act_1_audio = "Act_1_audio.mp3"
 act_2_3_audio = "Act_2_3_audio.mp3"
 
@@ -64,10 +64,6 @@ blue_key_card = Item("blue Keycard")
 factory_gate_key = Item("factory Gate Key")
 power_cell = Item("power-cell")
 
-
-
-
-
 #rooms ACT I
 cryo_respository = Cave("Cryo Repository")
 cryo_respository.set_description("A cold and sterile room, illuminated by the faint and\nrefracted glow of the rows upon rows of damaged cyro-cells.")
@@ -84,7 +80,7 @@ armoury.set_key("Armoury Key Card")
 armoury.add_item(mech_suit)
 
 cargo_bay = Cave("Cargo Bay")
-cargo_bay.set_description("A hevily damaged section of the ship, half crushed by\na mountain of debris and what was formerlly considered 'cargo'.\nA lone beam of natural sunlight from outside the ship penetrates through!\n\n-- Maybe some heavy machinery from the armoury could clear this debris? --")
+cargo_bay.set_description("A heavily damaged section of the ship, half crushed by\na mountain of debris and what was formerlly considered 'cargo'.\nA lone beam of natural sunlight from outside the ship penetrates through!\n\n-- Maybe some heavy machinery from the armoury could clear this debris? --")
 cargo_bay.set_locked(False)
 cargo_bay.add_item(armoury_key)
 
@@ -100,12 +96,14 @@ armoury.link_cave(hallway, "west")
 harry = Enemy("Harry", "A smelly Wumpus")
 harry.set_conversation("Hangry…Hanggrry")
 harry.set_health(100)
+harry.set_starting_health(100)
 harry.set_lowest_dmg_value(0)
 harry.set_highest_dmg_value(40)
 
 automaton_seeker = Enemy("Automoton Seeker", "A vile automoton who's come to finish the job")
 automaton_seeker.set_conversation("You die here, human! With the rest of your crew!")
 automaton_seeker.set_health(100)
+automaton_seeker.set_starting_health(100)
 automaton_seeker.set_lowest_dmg_value(0)
 automaton_seeker.set_highest_dmg_value(40)
 
@@ -119,7 +117,7 @@ cryo_respository.add_character(cpt_levi)
 
 #rooms ACT II 
 main_road = Cave("Main Road")
-main_road.set_description("A wide asphalt road that spans as far as the eye can see a deep layer\nof snow covers the surrounding area which reflects the moonlight\nThe mech suit is inconspicuously hidden under a torn fabric tarpn\n\n-- There's a bright artificial light emanating from the east --")
+main_road.set_description("A wide asphalt road that spans as far as the eye can see. A deep layer\nof snow covers the surrounding area which reflects the moonlight\nThe mech suit is inconspicuously hidden under a torn fabric tarpn\n\n-- There's a bright artificial light emanating from the east --")
 main_road.set_locked(False)
 main_road.add_item(pistol)
 
@@ -142,7 +140,7 @@ factory_floor.set_locked(True)
 factory_floor.set_key("factory gate key")
 
 security_room = Cave("Security Room")
-security_room.set_description("A small and quiet room which stands out in the snow. The flurescent\nlight illuminates its surroundings, prime of which is a lone tree\nstump with a knife jabbed in it")
+security_room.set_description("A small and quiet room which stands out in the snow. The flurescent\nlight illuminates its surroundings. Looks like a great place\nfor a nap.")
 security_room.set_locked(False)
 
 
@@ -164,27 +162,31 @@ security_room.link_cave(crash_site, "west")
 automaton_sentry_1 = Enemy("Automaton Sentry", "An armed Automaton Guard on lookout")
 automaton_sentry_1.set_conversation("Hey! You're not supposed to be here!")
 automaton_sentry_1.set_health(100)
-automaton_sentry_1.set_lowest_dmg_value(10)
-automaton_sentry_1.set_highest_dmg_value(40)
+automaton_sentry_1.set_starting_health(100)
+automaton_sentry_1.set_lowest_dmg_value(5)
+automaton_sentry_1.set_highest_dmg_value(35)
 factory_gate.add_character(automaton_sentry_1)
 
 automaton_sentry_2 = Enemy("Automaton Sentry", "An armed Automaton Guard, looks like he's looking for someone")
 automaton_sentry_2.set_conversation("Sentry 02 reporting!I found the intruder, over!")
 automaton_sentry_2.set_health(100)
-automaton_sentry_2.set_lowest_dmg_value(10)
-automaton_sentry_2.set_highest_dmg_value(40)
+automaton_sentry_2.set_starting_health(100)
+automaton_sentry_2.set_lowest_dmg_value(5)
+automaton_sentry_2.set_highest_dmg_value(35)
 
 automaton_sentry_3 = Enemy("Automaton Sentry", "An armed Automaton Guard, looks like he's on high alert")
 automaton_sentry_3.set_conversation("This is sentry 03! He's here! The intruder's here, over!")
 automaton_sentry_3.set_health(100)
-automaton_sentry_3.set_lowest_dmg_value(10)
-automaton_sentry_3.set_highest_dmg_value(40)
+automaton_sentry_3.set_starting_health(100)
+automaton_sentry_3.set_lowest_dmg_value(5)
+automaton_sentry_3.set_highest_dmg_value(35)
 
 automaton_factory_keeper = Enemy("Automaton Factory Keeper", "A large and intimidating automaton with mech upgrades.\nIt looks like his upgrades are powered by a power-cell!")
 automaton_factory_keeper.set_conversation("You dare set foot in my factory?!")
 automaton_factory_keeper.set_health(120)
-automaton_factory_keeper.set_lowest_dmg_value(15)
-automaton_factory_keeper.set_highest_dmg_value(45)
+automaton_factory_keeper.set_starting_health(120)
+automaton_factory_keeper.set_lowest_dmg_value(8)
+automaton_factory_keeper.set_highest_dmg_value(40)
 factory_floor.add_character(automaton_factory_keeper)
 
 gate_terminal = Character("Gate Control Terminal", "A digital terminal that controls the factory gate - [talk] to access terminal")
@@ -258,21 +260,24 @@ Rocket_room.link_cave(control_room, "west")
 boss_phase_1 = Enemy("Automaton Viceroy", "The proud mechanical ruler of Cyberstan come put you in the ground")
 boss_phase_1.set_conversation("Stand ready, human. You shall be reuinted with your fallen comrades very soon...")
 boss_phase_1.set_health(100)
-boss_phase_1.set_lowest_dmg_value(10)
-boss_phase_1.set_highest_dmg_value(45)
+boss_phase_1.set_starting_health(100)
+boss_phase_1.set_lowest_dmg_value(8)
+boss_phase_1.set_highest_dmg_value(40)
 boss_arena_1.add_character(boss_phase_1)
 
 boss_phase_2 = Enemy("Automaton Viceroy - 2nd form", "The despotic viceroy, now upgraded with an arsenal of heat-seeking rockets")
 boss_phase_2.set_conversation("You think this is over? No. Be ready to greet your foul brethren in hell!")
 boss_phase_2.set_health(150)
-boss_phase_2.set_lowest_dmg_value(15)
+boss_phase_2.set_starting_health(150)
+boss_phase_2.set_lowest_dmg_value(10)
 boss_phase_2.set_highest_dmg_value(50)
 boss_arena_2.add_character(boss_phase_2)
 
 boss_phase_3 = Enemy("Automaton Viceroy - 3rd form", "What stands before you is a hulking steel monster. His tall frame filled out with a bulk of guns and thick metal armour")
 boss_phase_3.set_conversation("YOU DIE HERE, MEATBAG!!!")
 boss_phase_3.set_health(250)
-boss_phase_3.set_lowest_dmg_value(15)
+boss_phase_3.set_starting_health(250)
+boss_phase_3.set_lowest_dmg_value(10)
 boss_phase_3.set_highest_dmg_value(55)
 boss_arena_3.add_character(boss_phase_3)
 
@@ -353,12 +358,53 @@ def play_music(track):
     pygame.mixer.music.load(track)
     pygame.mixer.music.play(-1)
 
+#ACT I map:
+def show_map_act_1():
+    print("\n")
+    print("|=========================================|")
+    print("|                                         |")
+    print("|             -- ACT I Map --             |")
+    print("|                                         |")
+    print("|            [cryo-repository]            |")
+    print("|                    |                    |")
+    print("|  [Cargo Bay] - [Hallway] - [Armoury]    |")
+    print("|                                         |")
+    print("|=========================================|")
+
+def show_map_act_2():
+    print("\n")
+    print("|=================================================================|")
+    print("|                                                                 |")
+    print("|                         -- ACT II Map --                        |")
+    print("|                                                                 |")
+    print("|      [Plaza]--[Main Road]--[Factory Gate]--[Factory Floor]      |")
+    print("|                    |              |                             |")
+    print("|              [Crash Site]--[Security Room]                      |")
+    print("|                                                                 |")
+    print("|=================================================================|")
+
+def show_map_act_3():
+    print("\n")
+    print("|===================================================================================================================|")
+    print("|                                                                                                                   |")
+    print("|                                                 -- ACT III Map --                                                 |")
+    print("|                                                                                                                   |")
+    print("|       [Gate]--[Lobby]--[Elevator 1]--[Observation Platform]--[Elevator 2]--[Inner Sanctum]--[Control Room]        |")
+    print("|                                                                                                    |              |")
+    print("|                                                                                             [Escape Rocket]       |")
+    print("|                                                                                                                   |")
+    print("|===================================================================================================================|")
+
+
 #gameplay loop
 
 bag = {
     "kill" : kill,
     "nothing" : nothing
 }
+
+valid_commands = ["north", "south", "east", "west", "talk", "fight", "take", "help", "map", "power mech suit", "use mech suit", "use mech suit", "liftoff"]
+
 
 #starting location/ACT
 act = 1
@@ -408,7 +454,7 @@ print("\n")
 print("--- ACT I ---")
 print("\n")
 print("You wake up to the cold embrace of your cryo-cell as it opens...")
-play_music(act_1_audio)
+#play_music(act_1_audio)
 while dead == False:
     #descriptions
     
@@ -431,9 +477,10 @@ while dead == False:
             character.describe()
 
     print("\n")
+    print("For information on commands, type [help]")
     command = input(">")
     command = command.lower()
-    print("-----------------------------------------------------------------------------")
+    print("--------------------------------------------------------------------------------------------------------------------------")
 
     #navigation
     if command in ["north", "south", "east", "west"]:
@@ -506,6 +553,7 @@ while dead == False:
                 if player_health <= 0:
                     print("you were defeated by " + enemy.name)
                     fighting = False
+                    enemy.health = enemy.starting_health
                     respawn(act)
                     break
 
@@ -521,6 +569,7 @@ while dead == False:
                 for item in bag.values():
                     if isinstance(item, Weapon):
                         print("* " + item.get_name() +item.get_dmg_range())
+                print("\n")
 
                 weapon_name = input("What will you fight with?\n")
                 weapon_name = weapon_name.lower()
@@ -529,6 +578,7 @@ while dead == False:
                     if bag[weapon_name].item_dmg_type == "ranged":
                         dmg_done = bag[weapon_name].get_dmg_value()
                         enemy.health = enemy.health - (dmg_done * ranged_dmg_done_modifier)
+                        print("\n")
                         print(str(dmg_done * ranged_dmg_done_modifier) + " damage done")
                         print("ranged dmg")
                         player_turn = False
@@ -536,6 +586,7 @@ while dead == False:
                     elif bag[weapon_name].item_dmg_type == "melee":
                         dmg_done = bag[weapon_name].get_dmg_value()
                         enemy.health = enemy.health - (dmg_done * melee_dmg_done_modifier)
+                        print("\n")
                         print(str(dmg_done * melee_dmg_done_modifier) + " damage done")
                         print("melee dmg")
                         player_turn = False
@@ -548,7 +599,7 @@ while dead == False:
                 dmg = enemy.get_dmg_value()
                 player_health = player_health - dmg
                 print(str(dmg) + " damage taken")
-
+                print("\n")
                 print("----------------")
                 print("Player Health: " + str(player_health))
                 print("Enemy Health: " + str(enemy.health))
@@ -578,6 +629,20 @@ while dead == False:
                     take_item(item, items)
                     break
 
+    elif command == "help":
+        print("--- Here are a list of possible commands ---")
+        print("[talk] - Interact with characters in your current location")
+        print("[fight] - Enter combat with an enemy in your current location")
+        print("[take] - put an item in your current location into your inventory")
+        print("[map] - Displays a map of the ACT that you're currently in")
+        print("[north] - move to the northern room if there is one")
+        print("[east] - move to the eastern room if there is one")
+        print("[south] - move to the southern room if there is one")
+        print("[west] - move to the western room if there is one")
+        print("[help] - Displays information on specific commands")
+        print("\n")
+        print("-- During the story, there will be special commands, indicated by square brackets [ ] --")
+
     #events
     if act == 1:
         if "mk3 mech suit" in bag and event_act1_1_mech_suit == False:
@@ -605,13 +670,16 @@ while dead == False:
                 print("As you make your way north from the Borealis crash site,\nits not long until the mech suit begins to make a strange noise.\nIts motors jitter and each movement is weaker than the last.\nThen suddenly, the mech suit stops...dead in its tracks.\nAs you inspect the suit, you find it, the power cell\nit's damaged from you earlier battle with the seeker.\nWithout the suit, you'll never make it to the room\n\n-- Maybe there's a power cell around here somewhere? --")
                 print("\n")
                 pygame.mixer.music.stop()
-                play_music(act_2_3_audio)
+                #play_music(act_2_3_audio)
+
+        if command == "map":
+            show_map_act_1()
 
     elif act == 2:
         if current_cave == factory_gate and automaton_sentry_1 not in current_cave.get_character() and event_act2_2_sentry1 == False:
             bag.update({"red Keycard" : red_key_card})
             print("\n")
-            print("It looks like your fight drew some attention. You hear other automatons arriving in the distance")
+            print("It looks like your fight drew some attention. You hear other automatons arriving in the distance.\nMaybe if you find and defeat them, they'll drop some keys")
             print("\n")
             print("----------------------------------------------------------------------------------------------------------")
             print("The automaton sentry dropped a [Red Keycard] and you put it in your inventory. Maybe this is for the gate?")
@@ -675,6 +743,9 @@ while dead == False:
                 print("\n")
                 bag.update({"power punch" : power_punch})
                 bag.update({"explosive shell" : explosive_shell})
+
+        if command == "map":
+            show_map_act_2()
                 
     elif act == 3:
         if current_cave == boss_arena_1 and boss_phase_1 not in current_cave.get_character() and event_act3_1_boss_1 == False:
@@ -726,3 +797,11 @@ while dead == False:
             if command == "liftoff":
                 print("You activate the rocket's ignition and it begins to violently rattle.\nThe engines roar to life and soon the rocket is thrust into the stars.\nBefore long, you feel the weightlessness of zero gravity as you\nfloat from your seat towards the window. Outside you see the\nplanet, Cyberstan. The many megafactories that litter its surface igniting like fireworks.\nYour comrades are avenged and the automatons crippled.\n\n--- Congratulations, you beat the game! ---")
                 dead = True
+
+        if command == "map":
+            show_map_act_3()
+
+    if command not in valid_commands:
+        print("----------------")
+        print("Invalid command.")
+        print("----------------")

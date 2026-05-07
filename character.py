@@ -30,6 +30,7 @@ class Enemy(Character):
         self.weakness = None
         self.health = 0
         self.dmg = 0
+        self.starting_health = 0
 
     def set_weakness(self, weakness):
         self.weakness = weakness
@@ -37,9 +38,16 @@ class Enemy(Character):
     #health system
     def set_health(self, health):
         self.health = health
-    
+
     def get_health(self):
         return self.health
+    
+    def set_starting_health(self, starting_health_input):
+        self.starting_health = starting_health_input
+
+    def get_starting_health(self):
+        return self.starting_health
+    
     
     def display_health(self):
         print(self.name + ' has ' + str(self.health) + ' health')
