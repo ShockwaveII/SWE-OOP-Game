@@ -657,6 +657,8 @@ while dead == False:
                 print("\n")
                 print("Using the Mech Suit, you clear the fallen debris.\nThe sound of metal scraping against the ships hull fills the room.\nYou manage to escape the escape the Borealis!")
                 print("\n")
+                print("Your mission now is to make your way to the central control facility and use\nthe self destruct sequence to destroy all megafactories on the planet")
+                print("\n")
                 print("Act I Complete")
                 event_act1_2_seeker = True
                 current_cave = main_road
