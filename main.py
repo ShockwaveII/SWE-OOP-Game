@@ -7,7 +7,7 @@ from tkinter import scrolledtext
 import random
 import pygame
 
-#pygame.mixer.init()
+pygame.mixer.init()
 act_1_audio = "Act_1_audio.mp3"
 act_2_3_audio = "Act_2_3_audio.mp3"
 
@@ -361,8 +361,8 @@ bag = {
 }
 
 #starting location/ACT
-act = 3
-current_cave = control_facility_gate
+act = 1
+current_cave = cryo_respository
 
 #act 1 events
 event_act1_1_mech_suit = False
@@ -408,7 +408,7 @@ print("\n")
 print("--- ACT I ---")
 print("\n")
 print("You wake up to the cold embrace of your cryo-cell as it opens...")
-#play_music(act_1_audio)
+play_music(act_1_audio)
 while dead == False:
     #descriptions
     
@@ -605,7 +605,7 @@ while dead == False:
                 print("As you make your way north from the Borealis crash site,\nits not long until the mech suit begins to make a strange noise.\nIts motors jitter and each movement is weaker than the last.\nThen suddenly, the mech suit stops...dead in its tracks.\nAs you inspect the suit, you find it, the power cell\nit's damaged from you earlier battle with the seeker.\nWithout the suit, you'll never make it to the room\n\n-- Maybe there's a power cell around here somewhere? --")
                 print("\n")
                 pygame.mixer.music.stop()
-                #play_music(act_2_3_audio)
+                play_music(act_2_3_audio)
 
     elif act == 2:
         if current_cave == factory_gate and automaton_sentry_1 not in current_cave.get_character() and event_act2_2_sentry1 == False:
