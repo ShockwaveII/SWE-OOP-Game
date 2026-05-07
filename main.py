@@ -11,33 +11,39 @@ act_2_3_audio = "act_2_3_audio.mp3"
 
 #weapons
 pistol = Weapon("Pistol")
-pistol.set_description("An abandoned pistol, half-buried in the snow")
+pistol.set_dmg_range(" - 10-30 ranged damage")
+pistol.set_description("An abandoned pistol, half-buried in the snow - 10-30 ranged damage")
 pistol.set_lowest_dmg_value(10)
 pistol.set_highest_dmg_value(30)
 pistol.set_dmg_type("ranged")
 
 combat_knife = Weapon("Combat Knife")
-combat_knife.set_description("A gunmetal grey combat knife, someone must have lost it")
+combat_knife.set_dmg_range(" - 0-40 melee damage")
+combat_knife.set_description("A gunmetal grey combat knife, someone must have lost it - 0-40 melee damage")
 combat_knife.set_lowest_dmg_value(0)
-combat_knife.set_highest_dmg_value(50)
+combat_knife.set_highest_dmg_value(40)
 combat_knife.set_dmg_type("melee")
 
 power_punch = Weapon("Power Punch")
+power_punch.set_dmg_range(" - 0-50 melee damage")
 power_punch.set_lowest_dmg_value(0)
 power_punch.set_highest_dmg_value(50)
 power_punch.set_dmg_type("melee")
 
 explosive_shell = Weapon("Explosive Shell")
+explosive_shell.set_dmg_range(" - 20-40 ranged damage")
 explosive_shell.set_lowest_dmg_value(20)
 explosive_shell.set_highest_dmg_value(40)
 explosive_shell.set_dmg_type("ranged")
 
 kill = Weapon("kill")
+kill.set_dmg_range(" 1000 ranged dmg")
 kill.set_lowest_dmg_value(1000)
 kill.set_highest_dmg_value(1000)
 kill.set_dmg_type("ranged")
 
 nothing = Weapon("nothing")
+nothing.set_dmg_range(" 0 melee damage")
 nothing.set_lowest_dmg_value(0)
 nothing.set_highest_dmg_value(0)
 nothing.set_dmg_type("melee")
@@ -174,9 +180,9 @@ automaton_sentry_3.set_highest_dmg_value(30)
 
 automaton_factory_keeper = Enemy("Automaton Factory Keeper", "A large and intimidating automaton with mech upgrades.\nIt looks like his upgrades are powered by a power-cell!")
 automaton_factory_keeper.set_conversation("You dare set foot in my factory?!")
-automaton_factory_keeper.set_health(150)
+automaton_factory_keeper.set_health(120)
 automaton_factory_keeper.set_lowest_dmg_value(0)
-automaton_factory_keeper.set_highest_dmg_value(50)
+automaton_factory_keeper.set_highest_dmg_value(40)
 factory_floor.add_character(automaton_factory_keeper)
 
 gate_terminal = Character("Gate Control Terminal", "A digital terminal that controls the factory gate - [talk] to access terminal")
@@ -248,10 +254,10 @@ Rocket_room.link_cave(control_room, "west")
 
 #characters ACT III
 boss_phase_1 = Enemy("Automaton Viceroy", "The proud mechanical ruler of Cyberstan come put you in the ground")
-boss_phase_1.set_conversation("Stand ready, human. You shall be reuinted with your fallen comrades very soon")
-boss_phase_1.set_health(150)
+boss_phase_1.set_conversation("Stand ready, human. You shall be reuinted with your fallen comrades very soon...")
+boss_phase_1.set_health(100)
 boss_phase_1.set_lowest_dmg_value(0)
-boss_phase_1.set_highest_dmg_value(50)
+boss_phase_1.set_highest_dmg_value(45)
 boss_arena_1.add_character(boss_phase_1)
 
 boss_phase_2 = Enemy("Automaton Viceroy - 2nd form", "The despotic viceroy, now upgraded with an arsenal of heat-seaking rockets")
@@ -263,9 +269,9 @@ boss_arena_2.add_character(boss_phase_2)
 
 boss_phase_3 = Enemy("Automaton Viceroy - 3rd form", "What stands before you is a hulking steel monster. His tall frame filled out with a bulk of guns and thick metal armour")
 boss_phase_3.set_conversation("YOU DIE HERE, MEATBAG!!!")
-boss_phase_3.set_health(150)
+boss_phase_3.set_health(200)
 boss_phase_3.set_lowest_dmg_value(0)
-boss_phase_3.set_highest_dmg_value(50)
+boss_phase_3.set_highest_dmg_value(55)
 boss_arena_3.add_character(boss_phase_3)
 
 control_console = Character("Control Console", "A large assortment of buttons and switches with a large detonation button in the centre")
@@ -283,14 +289,16 @@ boss_phase_3_key = Item("boss phase 3")
 
 #rewards 1
 rocket_launcher = Weapon("Rocket launcher")
-rocket_launcher.set_description("A VERY powerful ranged weapon! reliable but damage is limited")
+rocket_launcher.set_dmg_range(" - 20-65 ranged damage")
+rocket_launcher.set_description("A VERY powerful ranged weapon! reliable but damage is limited - 20-65 ranged damage")
 rocket_launcher.set_lowest_dmg_value(20)
 rocket_launcher.set_highest_dmg_value(65)
 rocket_launcher.set_dmg_type("ranged")
 upgrade_room_1.add_item(rocket_launcher)
 
 rocket_hammer = Weapon("Rocket Hammer")
-rocket_hammer.set_description("A VERY powerful melee weapon! can do alot of damage is also very dodgeable")
+rocket_hammer.set_dmg_range(" - 0-85 melee damage")
+rocket_hammer.set_description("A VERY powerful melee weapon! can do alot of damage is also very dodgeable - 0-85 melee damage")
 rocket_hammer.set_lowest_dmg_value(0)
 rocket_hammer.set_highest_dmg_value(85)
 rocket_hammer.set_dmg_type("melee")
@@ -510,7 +518,7 @@ while dead == False:
                 print("Available weapons:")
                 for item in bag.values():
                     if isinstance(item, Weapon):
-                        print("* " + item.get_name())
+                        print("* " + item.get_name() +item.get_dmg_range())
 
                 weapon_name = input("What will you fight with?\n")
                 weapon_name = weapon_name.lower()
@@ -663,6 +671,8 @@ while dead == False:
                 print("\n")
                 print("You make your way to the foot of the steely spire which dominates the skyline,\nThe Megafactory Control Facility\nAs you step foot through the gate, you see the visage of a tall and menacing machine\n-- looks like there's going to be one last fight... --")
                 print("\n")
+                bag.update({"power punch" : power_punch})
+                bag.update({"explosive shell" : explosive_shell})
                 
     elif act == 3:
         if current_cave == boss_arena_1 and boss_phase_1 not in current_cave.get_character() and event_act3_1_boss_1 == False:

@@ -27,6 +27,7 @@ class Weapon(Item):
         self.item_dmg_type = None
         self.item_lowest_dmg_value = 0
         self.item_highest_dmg_value = 0
+        self.dmg_range = None
 
     #damage values
     def set_lowest_dmg_value(self, item_lowest_dmg_value):
@@ -50,3 +51,9 @@ class Weapon(Item):
 
     def get_dmg_type(self):
         return self.item_dmg_type
+    
+    def set_dmg_range(self, input_dmg_range):
+        self.dmg_range = input_dmg_range
+
+    def get_dmg_range(self):
+        return self.dmg_range
