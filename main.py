@@ -10,30 +10,43 @@ import pygame
 #pygame.mixer.init()
 act_1_audio = "Act_1_audio.mp3"
 act_2_3_audio = "Act_2_3_audio.mp3"
+map_effect_audio = "Map_effect.mp3"
+battle_begin_audio = "Battle_begin.mp3"
+enemy_death_audio = "Enemy_death_effect.mp3"
+player_death_audio = "Player_death.mp3"
+mech_suit_steps_audio = "Mech_suit_steps.mp3"
+ship_footsteps_audio = "Ship_footsteps.mp3"
+snowy_footsteps_audio = "Snowy_footsteps_effect.mp3"
+attack_audio = "Power_punch.mp3"
+talking_audio = "Talking_effect.mp3"
+detonation_audio = "detonation.mp3"
+clear_debris_audio = "clear_debris.mp3"
+power_mech_suit_audio = "power_mech_suit.mp3" 
+take_audio = "take.mp3"
 
 #weapons
 pistol = Weapon("Pistol")
-pistol.set_dmg_range(" - 10-30 ranged damage")
-pistol.set_description("An abandoned pistol, half-buried in the snow - 10-30 ranged damage")
+pistol.set_dmg_range(" - 10-35 ranged damage")
+pistol.set_description("An abandoned pistol, half-buried in the snow - 10-35 ranged damage")
 pistol.set_lowest_dmg_value(10)
 pistol.set_highest_dmg_value(35)
 pistol.set_dmg_type("ranged")
 
 combat_knife = Weapon("Combat Knife")
-combat_knife.set_dmg_range(" - 0-40 melee damage")
-combat_knife.set_description("A gunmetal grey combat knife, someone must have lost it - 0-40 melee damage")
+combat_knife.set_dmg_range(" - 0-45 melee damage")
+combat_knife.set_description("A gunmetal grey combat knife, someone must have lost it - 0-45 melee damage")
 combat_knife.set_lowest_dmg_value(0)
 combat_knife.set_highest_dmg_value(45)
 combat_knife.set_dmg_type("melee")
 
 power_punch = Weapon("Power Punch")
-power_punch.set_dmg_range(" - 0-50 melee damage")
+power_punch.set_dmg_range(" - 0-55 melee damage")
 power_punch.set_lowest_dmg_value(0)
 power_punch.set_highest_dmg_value(55)
 power_punch.set_dmg_type("melee")
 
 explosive_shell = Weapon("Explosive Shell")
-explosive_shell.set_dmg_range(" - 20-40 ranged damage")
+explosive_shell.set_dmg_range(" - 20-45 ranged damage")
 explosive_shell.set_lowest_dmg_value(20)
 explosive_shell.set_highest_dmg_value(45)
 explosive_shell.set_dmg_type("ranged")
@@ -117,7 +130,7 @@ cryo_respository.add_character(cpt_levi)
 
 #rooms ACT II 
 main_road = Cave("Main Road")
-main_road.set_description("A wide asphalt road that spans as far as the eye can see. A deep layer\nof snow covers the surrounding area which reflects the moonlight\nThe mech suit is inconspicuously hidden under a torn fabric tarpn\n\n-- There's a bright artificial light emanating from the east --")
+main_road.set_description("A wide asphalt road that spans as far as the eye can see. A deep layer\nof snow covers the surrounding area which reflects the moonlight\nThe mech suit is inconspicuously hidden under a torn fabric tarp\n\n-- There's a bright artificial light emanating from the east --")
 main_road.set_locked(False)
 main_road.add_item(pistol)
 
@@ -276,9 +289,9 @@ boss_arena_2.add_character(boss_phase_2)
 boss_phase_3 = Enemy("Automaton Viceroy - 3rd form", "What stands before you is a hulking steel monster. His tall frame filled out with a bulk of guns and thick metal armour")
 boss_phase_3.set_conversation("YOU DIE HERE, MEATBAG!!!")
 boss_phase_3.set_health(150)
-boss_phase_3.set_starting_health(150)
-boss_phase_3.set_lowest_dmg_value(10)
-boss_phase_3.set_highest_dmg_value(50)
+boss_phase_3.set_starting_health(120)
+boss_phase_3.set_lowest_dmg_value(5)
+boss_phase_3.set_highest_dmg_value(40)
 boss_arena_3.add_character(boss_phase_3)
 
 control_console = Character("Control Console", "A large assortment of buttons and switches with a large detonation button in the centre")
@@ -307,7 +320,7 @@ rocket_hammer = Weapon("Rocket Hammer")
 rocket_hammer.set_dmg_range(" - 0-85 melee damage")
 rocket_hammer.set_description("A VERY powerful melee weapon! can do alot of damage is also very dodgeable - 0-85 melee damage")
 rocket_hammer.set_lowest_dmg_value(0)
-rocket_hammer.set_highest_dmg_value(75)
+rocket_hammer.set_highest_dmg_value(85)
 rocket_hammer.set_dmg_type("melee")
 upgrade_room_1.add_item(rocket_hammer)
 
@@ -330,6 +343,7 @@ def take_item(item, items):
     print("You put the " + item.get_name() + " in your inventory")
     print("------------------------------" + ("-" * len(item.get_name())))
     bag.update({item.get_name().lower(): item})
+    #take_audio.play()
     items.remove(item)
 
 def respawn(act):
@@ -407,8 +421,9 @@ valid_commands = ["north", "south", "east", "west", "talk", "fight", "take", "he
 
 
 #starting location/ACT
-act = 1
-current_cave = cryo_respository
+act = 3
+current_cave = control_facility_gate
+steps_sound = ship_footsteps_audio
 
 #act 1 events
 event_act1_1_mech_suit = False
@@ -448,7 +463,7 @@ melee_dmg_done_modifier = 1
 
 
 print("-------------------------------------------------------------------------------------------------")
-print("You are the ‘Sole Survivor’, an Imperial marine aboard the ISV Borealis which has crashed\non the Forgeworld of ‘Cyberstan’, occupied by the treacherous Automoton Legion. The legion\nof mechanical monstrosities has launched its brutal war of aggression against the Imperium\nof Terra, sending the galaxy into turmoil. Now alone and behind enemy lines, you have no choice\nbut to take down the Forgeworld and ensure it cannot fuel the automaton war machine.")
+print("You are the ‘Sole Survivor’, an Imperial marine aboard the ISV Borealis which has been shot\ndown over the the Forgeworld of ‘Cyberstan’, occupied by the treacherous Automoton Legion. The legion\nof mechanical monstrosities has launched its brutal war of aggression against the Imperium\nof Terra, sending the galaxy into turmoil. Now alone and behind enemy lines, you have no choice\nbut to take down the Forgeworld and ensure it cannot fuel the automaton war machine.")
 print("-------------------------------------------------------------------------------------------------")
 print("\n")
 print("--- ACT I ---")
@@ -485,6 +500,7 @@ while dead == False:
     #navigation
     if command in ["north", "south", "east", "west"]:
             current_cave = current_cave.move(command, bag)
+            #steps_sound.play()
 
     # Talk to the inhabitant
     elif command == "talk":
@@ -494,12 +510,13 @@ while dead == False:
         elif len(inhabitant) == 1:
             char = inhabitant[0]
             print("You talk to " + char.name)
+            #talking_audio.play()
             char.talk()
 
         else:
             print("Who do you want to talk to?")
             for char in inhabitant:
-                print("- " + char.name)
+                print("* " + char.name)
 
             choice = input()
             choice = choice.lower()
@@ -507,6 +524,7 @@ while dead == False:
             for char in inhabitant:
                 if char.name.lower() == choice:
                     char.talk()
+                    #talking_audio.play()
                     break
 
     # Fight with the inhabitant
@@ -514,6 +532,7 @@ while dead == False:
         fighting = True
         player_turn = True
         enemy_turn = False
+        #battle_begin_audio.play()
 
         if not inhabitant:
             print("There is no one here to fight with")
@@ -533,7 +552,7 @@ while dead == False:
         else:
             print("Who do you want to fight?")
             for char in enemies:
-                print("- " + char.name)
+                print("* " + char.name)
 
             choice = input()
             choice = choice.lower()
@@ -554,12 +573,14 @@ while dead == False:
                     print("you were defeated by " + enemy.name)
                     fighting = False
                     enemy.health = enemy.starting_health
+                    #player_death_audio.play()
                     respawn(act)
                     break
 
                 if enemy.health <= 0:
                     print("You defeated " + enemy.name)
                     print("You heal back to 100 health")
+                    #enemy_death_audio.play()
                     current_cave.remove_character(enemy)
                     player_health = 100
                     fighting = False
@@ -576,6 +597,7 @@ while dead == False:
                 weapon_name = weapon_name.lower()
 
                 if weapon_name in bag:
+                    #attack_audio.play()
                     if bag[weapon_name].item_dmg_type == "ranged":
                         dmg_done = bag[weapon_name].get_dmg_value()
                         enemy.health = enemy.health - (dmg_done * ranged_dmg_done_modifier)
@@ -620,7 +642,7 @@ while dead == False:
         else:
             print("What do you want to take?")
             for item in items:
-                print("- " + item.name)
+                print("* " + item.name)
 
             choice = input()
             choice = choice.lower()
@@ -650,7 +672,9 @@ while dead == False:
             bag.update({"power punch" : power_punch})
             bag.update({"explosive shell" : explosive_shell})
             cargo_bay.add_character(automaton_seeker)
+            steps_sound = mech_suit_steps_audio
             event_act1_1_mech_suit = True
+            steps_sound = snowy_footsteps_audio
 
         if automaton_seeker not in cargo_bay.get_character() and event_act1_1_mech_suit == True and event_act1_2_seeker == False and current_cave == cargo_bay: 
             cargo_bay.set_description("A heavily damaged section of the ship, half crushed by\na mountain of debris and what was formally considered 'cargo'.\nA lone beam of natural sunlight from outside the ship penetrates through!\n\n---------------------------------------------------------\nType [Use Mech Suit] to clear debris and escape the ship!\n---------------------------------------------------------")
@@ -674,6 +698,7 @@ while dead == False:
                 print("\n")
                 #testing -- pygame.mixer.music.stop()
                 #testing -- play_music(act_2_3_audio)
+                #clear_debris_audio.play()
 
         if command == "map":
             show_map_act_1()
@@ -746,6 +771,8 @@ while dead == False:
                 print("\n")
                 bag.update({"power punch" : power_punch})
                 bag.update({"explosive shell" : explosive_shell})
+                steps_sound = mech_suit_steps_audio
+                #power_mech_suit_audio.play()
 
         if command == "map":
             show_map_act_2()
@@ -772,20 +799,20 @@ while dead == False:
             print("\n")
             event_act3_3_boss_3 = True
 
-        if current_cave == upgrade_room_1 and rocket_hammer not in current_cave.get_item() and event_act3_4_rocket_hammer == False:
+        if current_cave == upgrade_room_1 and "rocket hammer" in bag and event_act3_4_rocket_hammer == False:
             current_cave.remove_item(rocket_launcher)
             event_act3_4_rocket_hammer = True
 
-        if current_cave == upgrade_room_1 and rocket_launcher not in current_cave.get_item() and event_act3_5_rocket_launcher == False:
+        if current_cave == upgrade_room_1 and "rocket launcher" in bag and event_act3_5_rocket_launcher == False:
             current_cave.remove_item(rocket_hammer)
             event_act3_5_rocket_launcher = True
 
-        if current_cave == upgrade_room_2 and laser_sights not in current_cave.get_item() and event_act3_6_sights == False:
+        if current_cave == upgrade_room_2 and "laser sights" in bag and event_act3_6_sights == False:
             current_cave.remove_item(mech_suit_overclock)
             ranged_dmg_done_modifier = ranged_dmg_done_modifier + 0.25
             event_act3_6_sights = True
 
-        if current_cave == upgrade_room_2 and mech_suit_overclock not in current_cave.get_item() and event_act3_7_overclock == False:
+        if current_cave == upgrade_room_2 and "mech suit overclocking" in bag and event_act3_7_overclock == False:
             current_cave.remove_item(laser_sights)
             melee_dmg_done_modifier = melee_dmg_done_modifier + 0.25
             event_act3_7_overclock = True
@@ -794,6 +821,7 @@ while dead == False:
             if command == "self destruct":
                 current_cave.set_description("A small chamber littered with a plethora of screens and blinking\nlights. The centrepeice is a large red button that reads Detonate.\n\n--- Hurry to the escape rocket! ---")
                 print("As you press the button, you feel the ground start to shake. Your\neyes are drawn to the screens that now flash with a red 'warning' sign\nAll megafactories all arounf the planet have begun the self destruct\nsequence, including the one you're in right now!")
+                #detonation_audio.play()
                 event_act3_8_BOMBSAWAY = True
 
         if current_cave == Rocket_room and event_act3_8_BOMBSAWAY == True:
