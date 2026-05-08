@@ -16,7 +16,7 @@ enemy_death_audio = "Enemy_death_effect.mp3"
 player_death_audio = "Player_death.mp3"
 mech_suit_steps_audio = "Mech_suit_steps.mp3"
 ship_footsteps_audio = "Ship_footsteps.mp3"
-snowy_footsteps_audio = "Snowy_footsteps_effect.mp3"
+snowy_footsteps_audio = "snowy_steps.mp3"
 attack_audio = "Power_punch.mp3"
 talking_audio = "Talking_effect.mp3"
 detonation_audio = "detonation.mp3"
@@ -374,6 +374,7 @@ def play_music(track):
 
 #ACT I map:
 def show_map_act_1():
+    #map_effect_audio()
     print("\n")
     print("|=========================================|")
     print("|                                         |")
@@ -386,6 +387,7 @@ def show_map_act_1():
     print("|=========================================|")
 
 def show_map_act_2():
+    #map_effect_audio()
     print("\n")
     print("|=================================================================|")
     print("|                                                                 |")
@@ -398,6 +400,7 @@ def show_map_act_2():
     print("|=================================================================|")
 
 def show_map_act_3():
+    #map_effect_audio()
     print("\n")
     print("|===================================================================================================================|")
     print("|                                                                                                                   |")
@@ -417,12 +420,12 @@ bag = {
     "nothing" : nothing
 }
 
-valid_commands = ["north", "south", "east", "west", "talk", "fight", "take", "help", "map", "power mech suit", "use mech suit", "use mech suit", "liftoff"]
+valid_commands = ["north", "south", "east", "west", "talk", "fight", "take", "help", "map", "power mech suit", "use mech suit", "self destrcut", "liftoff"]
 
 
 #starting location/ACT
-act = 3
-current_cave = control_facility_gate
+act = 1
+current_cave = cryo_respository
 steps_sound = ship_footsteps_audio
 
 #act 1 events
@@ -821,7 +824,7 @@ while dead == False:
             if command == "self destruct":
                 current_cave.set_description("A small chamber littered with a plethora of screens and blinking\nlights. The centrepeice is a large red button that reads Detonate.\n\n--- Hurry to the escape rocket! ---")
                 print("As you press the button, you feel the ground start to shake. Your\neyes are drawn to the screens that now flash with a red 'warning' sign\nAll megafactories all arounf the planet have begun the self destruct\nsequence, including the one you're in right now!")
-                #detonation_audio.play()
+                #play_music(detonation_audio)
                 event_act3_8_BOMBSAWAY = True
 
         if current_cave == Rocket_room and event_act3_8_BOMBSAWAY == True:
